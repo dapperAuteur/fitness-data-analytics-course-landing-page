@@ -23,7 +23,7 @@ const WaitlistSubmissionSchema = new Schema({
   },
   phone: {
     type: String,
-    required: true,
+    // required: true,
     trim: true,
     match: [phoneRegex, 'Please enter a valid phone number.'],
   },

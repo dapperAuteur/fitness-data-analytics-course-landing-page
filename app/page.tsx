@@ -54,11 +54,11 @@ const FitnessAnalyticsLanding = () => {
     } else if (!emailRegex.test(formData.email)) {
         newErrors.email = 'Please enter a valid email address.';
     }
-    if (!formData.phone) {
-        newErrors.phone = 'Phone number is required.';
-    } else if (!phoneRegex.test(formData.phone)) {
-        newErrors.phone = 'Please enter a valid phone number (e.g., +11234567890).';
-    }
+    // if (!formData.phone) {
+    //     newErrors.phone = 'Phone number is required.';
+    // } else if (!phoneRegex.test(formData.phone)) {
+    //     newErrors.phone = 'Please enter a valid phone number (e.g., +11234567890).';
+    // }
     
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
@@ -167,7 +167,7 @@ const FitnessAnalyticsLanding = () => {
                       {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Phone Number *</label>
+                      <label className="block text-sm font-medium mb-2">Phone Number</label>
                       <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={`w-full px-4 py-3 border rounded-lg focus:ring-2 ${errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-500'}`} placeholder="+11234567890" />
                       {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                     </div>
