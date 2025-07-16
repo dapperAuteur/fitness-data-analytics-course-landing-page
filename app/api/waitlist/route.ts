@@ -25,7 +25,8 @@ export async function POST(req: Request) {
     // --- Server-side validation ---
     // Note: The Mongoose schema already provides robust validation,
     // but an initial check here can save a database call.
-    if (!firstName || !lastName || !email || !phone) {
+    // Phone is NO longer required!
+    if (!firstName || !lastName || !email) {
       const errorMessage = 'Validation failed: Missing required fields.';
       logger.error(errorMessage, body);
       // Use NextResponse for responses
