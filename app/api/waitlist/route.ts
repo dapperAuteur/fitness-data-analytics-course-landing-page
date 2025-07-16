@@ -32,6 +32,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: errorMessage }, { status: 400 });
     }
 
+    const existingSubmission = await WaitlistSubmission.findOne({ email });
+    if (existingSubmission) {
+      const errorMessage = 'This email address has already been submitted.';
+      logger.warn(errorMessage, { email });
+      return NextResponse.json({ message: errorMessage }, { status: 409 });
+    }
+
     const newSubmission = new WaitlistSubmission({
       firstName,
       lastName,
