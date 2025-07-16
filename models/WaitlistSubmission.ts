@@ -18,6 +18,8 @@ const WaitlistSubmissionSchema = new Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true,
+    match: [/.+\@.+\..+/, 'Please fill a valid email address'],
   },
   phone: {
     type: String,

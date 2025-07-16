@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
-import clientLogger from '../logging/clientLogger'; // Adjust path if needed
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import clientLogger from '../logging/clientLogger';
 import Hero from '@/components/Hero';
 import Header from '@/components/Header';
 import CourseOverview from '@/components/CourseOverview';
@@ -106,6 +106,18 @@ const FitnessAnalyticsLanding = () => {
       [e.target.name]: e.target.value
     });
   };
+
+  const resetFormAndGoBack = () => {
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+    });
+    setErrors({});
+    setServerError('');
+    setIsSubmitted(false);
+  };
   
   const shareUrl = "YOUR_WEBSITE_URL"; // IMPORTANT: Replace with your actual URL
   const shareTitle = "Foundations of Fitness and Health Metrics Course";
@@ -169,7 +181,23 @@ const FitnessAnalyticsLanding = () => {
                 </form>
               </>
             ) : (
-                <ThankYouPage />
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Check className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-3xl font-bold text-gray-900 mb-4">Thank You!</h3>
+                  <p className="text-xl text-gray-600 mb-6">You're on the waitlist! We'll notify you when enrollment opens.</p>
+                  <p className="text-gray-600 mb-8">In the meantime, share this opportunity with others!</p>
+                  <button
+                    type="button"
+                    onClick={resetFormAndGoBack}
+                    className="w-full bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold py-4 px-8 rounded-lg hover:from-purple-700 hover:to-fuchsia-700 transition-all duration-200 flex items-center justify-center gap-2 text-lg disabled:opacity-50"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                    Submit Another Response
+                  </button>
+                  <ShareButtons />
+              </div>
             )}
           </div>
         </div>
