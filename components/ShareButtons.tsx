@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { Linkedin, Facebook, Mail } from 'lucide-react';
 import { LinkedinShareButton, FacebookShareButton, EmailShareButton, BlueskyShareButton } from 'react-share';
 
-// const shareUrl = "YOUR_WEBSITE_URL"; // IMPORTANT: Replace with your actual URL
 const shareTitle = "Foundations of Fitness and Health Metrics Course";
 const hashtag = "#FitnessAnalytics";
 
