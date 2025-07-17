@@ -1,83 +1,41 @@
+// File: app/api/waitlist/route.ts
+
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/db/dbConnect';
-import WaitlistSubmission from '../../../models/WaitlistSubmission';
-import logger from '../../../logging/logger';
-import { sendToPabbly } from '@/lib/pabbly';
+import logger from '@/logging/logger';
+import { handleWaitlistSubmission } from '@/lib/services/waitlistService'; // NEW: Import the service
 
 /**
- * Handles POST requests to create a new waitlist submission
- * and then sends the data to a Pabbly webhook.
+ * API Route for handling waitlist form submissions.
+ * This route acts as a controller. Its only job is to receive the request,
+ * pass it to the appropriate service, and return a response.
+ * All business logic is handled in the waitlistService.
  */
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   logger.info('Received POST request to /api/waitlist');
 
   try {
-    const body = await req.json();
+    const body = await request.json();
 
-    const { firstName, lastName, email, phone, referrer } = body;
+    // Pass the entire request body to the service layer to handle.
+    const result = await handleWaitlistSubmission(body);
 
-    // Log the received data
-    logger.info('Request body received', { body });
-
-
-    await dbConnect();
-
-    // --- Server-side validation ---
-    // Note: The Mongoose schema already provides robust validation,
-    // but an initial check here can save a database call.
-    // Phone is NO longer required!
-    if (!firstName || !lastName || !email) {
-      const errorMessage = 'Validation failed: Missing required fields.';
-      logger.error(errorMessage, body);
-      // Use NextResponse for responses
-      return NextResponse.json({ message: errorMessage }, { status: 400 });
+    // The service layer returns the appropriate response.
+    if (!result.success) {
+      return NextResponse.json({ message: result.message }, { status: result.status });
     }
 
-    const existingSubmission = await WaitlistSubmission.findOne({ email });
-    if (existingSubmission) {
-      const errorMessage = 'This email address has already been submitted.';
-      logger.warn(errorMessage, { email });
-      return NextResponse.json({ message: errorMessage }, { status: 409 });
-    }
-
-    const newSubmission = new WaitlistSubmission({
-      firstName,
-      lastName,
-      email,
-      phone,
-      referrer,
-    });
-
-    await newSubmission.save();
-
-    logger.info('New waitlist submission saved successfully', { email });
-
-    // --- Fire-and-forget Pabbly Webhook Call ---
-    // This is not awaited, so it doesn't block the response to the user.
-    // The webhook call will run in the background.
-    sendToPabbly({ firstName, lastName, email, phone, referrer });
-    // ---------------------------------------------
-
-    // Return a success response
-    return NextResponse.json({ message: 'Successfully joined the waitlist!' }, { status: 201 });
+    return NextResponse.json({ message: result.message }, { status: 201 });
 
   } catch (error: any) {
     logger.error('Error in /api/waitlist POST handler', {
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
-    // Handle validation errors from Mongoose specifically
-    if (error.name === 'ValidationError') {
-      return NextResponse.json({ message: error.message }, { status: 400 });
-    }
 
-    // Handle other potential errors (e.g., JSON parsing)
     if (error instanceof SyntaxError) {
         return NextResponse.json({ message: 'Invalid JSON in request body' }, { status: 400 });
     }
 
-    // Return a generic server error response
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-  
   }
 }
