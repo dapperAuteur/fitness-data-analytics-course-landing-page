@@ -1,7 +1,7 @@
 import mongoose, { Schema, models } from 'mongoose';
 
 // Regex for international phone numbers
-const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+const phoneRegex = /^\+?[1-9]\d{6,14}$/;
 
 const WaitlistSubmissionSchema = new Schema({
   firstName: {
@@ -25,7 +25,13 @@ const WaitlistSubmissionSchema = new Schema({
     type: String,
     // required: true,
     trim: true,
-    match: [phoneRegex, 'Please enter a valid phone number.'],
+    validate: {
+      validator: function(v: string) {
+        // If a phone number is provided it must be valid. Allows empty/null values.
+        return !v || phoneRegex.test(v);
+      },
+      message: 'Please enter a valid phone number.'
+    },
   },
   referrer: {
     type: String,

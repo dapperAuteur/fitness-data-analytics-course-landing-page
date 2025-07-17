@@ -23,7 +23,7 @@ interface FormErrors {
 }
 
 // Phone regex for client-side validation
-const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+const phoneRegex = /^\+?[1-9]\d{6,14}$/;
 const emailRegex = /.+\@.+\..+/;
 
 // --- Form Component with reCAPTCHA Logic ---
@@ -58,9 +58,9 @@ const WaitlistForm = () => {
         newErrors.email = 'Please enter a valid email address.';
     }
     // Phone number is optional, if phone validate.
-    // if (!phoneRegex.test(formData.phone)) {
-    //     newErrors.phone = 'Please enter a valid phone number (e.g., +11234567890).';
-    // }
+    if (formData.phone.length > 0 && !phoneRegex.test(formData.phone)) {
+        newErrors.phone = 'Please enter a valid phone number (e.g., +11234567890).';
+    }
     
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
