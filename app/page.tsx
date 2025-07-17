@@ -8,7 +8,6 @@ import Header from '@/components/Header';
 import CourseOverview from '@/components/CourseOverview';
 import WeeklyBreakdown from '@/components/WeeklyBreakdown';
 import Specialization from '@/components/Specialization';
-import ThankYouPage from '@/components/ThankYouPage';
 import Footer from '@/components/Footer';
 import ShareButtons from '@/components/ShareButtons';
 
@@ -109,7 +108,7 @@ const WaitlistForm = () => {
 
         // --- NEW: If successful, also send to Keap ---
         // This is a "fire-and-forget" call so it doesn't slow down the UI.
-        sendToKeap(formData);
+        // sendToKeap(formData);
 
         setIsSubmitted(true);
     } catch (error: any) {
