@@ -36,6 +36,7 @@ export async function sendToPabbly(data: SubmissionData): Promise<void> {
 
     if (!response.ok) {
       // Log the error but don't throw, to avoid breaking the user-facing flow.
+      // Pabbly isn't triggering for the deployed version. Why?
       const errorBody = await response.text();
       logger.error("Failed to send data to Pabbly webhook.", {
         statusCode: response.status,
