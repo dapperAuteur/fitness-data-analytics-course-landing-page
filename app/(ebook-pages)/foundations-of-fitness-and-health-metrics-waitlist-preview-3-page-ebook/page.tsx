@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
-import { Share2, Mail, Facebook, Twitter, Linkedin, Copy, Download, Users, TrendingUp, Heart, Target } from 'lucide-react'
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
+import { Download, Users, TrendingUp, Heart, Target } from 'lucide-react'
 import WaitlistForm from '@/components/WaitlistForm'
 import Footer from '@/components/Footer'
 import ShareSection from '@/components/ShareSection'
@@ -19,8 +18,6 @@ export default function EbookLandingPage() {
       </div>
     );
   }
-
-  const [isSubmitted, setIsSubmitted] = useState(false)
 
   return (
     <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey}>
@@ -97,8 +94,7 @@ export default function EbookLandingPage() {
 
               {/* Right Column - Email Capture */}
               <div className="bg-white rounded-2xl p-8 shadow-2xl">
-                {!isSubmitted ? (
-                  <>
+  
                     <div className="text-center mb-6">
                       <Download className="w-12 h-12 text-purple-600 mx-auto mb-4" />
                       <h3 className="text-2xl font-bold text-gray-800 mb-2">Get Your Free Guide</h3>
@@ -109,8 +105,6 @@ export default function EbookLandingPage() {
                     <p className="text-xs text-gray-500 text-center mt-4">
                       No spam. Unsubscribe anytime. Part of the World's Fastest Centenarian Specialization.
                     </p>
-                  </>
-                ) : (
                   <div className="text-center">
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,15 +113,7 @@ export default function EbookLandingPage() {
                     </div>
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">Check Your Email!</h3>
                     <p className="text-gray-600 mb-6">Your free guide is on its way. Check your inbox for the download link.</p>
-                    
-                    {/* <button
-                      onClick={() => setShowShareModal(true)}
-                      className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-                    >
-                      Share This Guide
-                    </button> */}
                   </div>
-                )}
               </div>
             </div>
 

@@ -30,7 +30,7 @@ interface WaitlistPayload {
     lastName: string;
     email: string;
     phone: string | '';
-    pageSource?: string;
+    pageSourceState?: string;
     referrer?: string;
     token: string;
 }
@@ -41,7 +41,8 @@ interface WaitlistPayload {
  * @returns An object indicating success status, a message, and a status code.
  */
 export async function handleWaitlistSubmission(payload: WaitlistPayload) {
-  const { firstName, lastName, email, phone, pageSource, referrer, token } = payload;
+  const { firstName, lastName, email, phone, pageSourceState: pageSource, referrer, token } = payload;
+  console.log('pageSource :>> ', pageSource);
 
   if (!token || !(await verifyRecaptcha(token))) {
     logger.error("reCAPTCHA verification failed. Rejecting submission.");

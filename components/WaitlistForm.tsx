@@ -1,6 +1,7 @@
 "use client"
+
 import React, { useCallback, useState, useEffect } from 'react';
-import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import clientLogger from '../logging/clientLogger';
 import ShareButtons from '@/components/ShareButtons';
@@ -88,6 +89,7 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
             // NEW: Send token with the form data
             body: JSON.stringify({ ...formData, pageSourceState, referrer, token }),
         });
+        console.log('pageSourceState :>> ', pageSourceState);
 
         const result = await response.json();
 
@@ -129,6 +131,14 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
     setIsSubmitted(false);
   };
 
+  useEffect(() => {
+    setReferrer(document.referrer);
+    setpageSourceState(pageSource);
+    clientLogger.info('Landing page loaded', { referrer: document.referrer });
+    console.log('referrer :>> ', referrer);
+    console.log('pageSource :>> ', pageSource);
+  }, [pageSource]);
+
   if (isSubmitted) {
     return (
       <div className="text-center py-8">
@@ -152,14 +162,6 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
       </div>
     );
   }
-
-  useEffect(() => {
-    setReferrer(document.referrer);
-    setpageSourceState(pageSource);
-    clientLogger.info('Landing page loaded', { referrer: document.referrer });
-    console.log('referrer :>> ', referrer);
-    console.log('pageSource :>> ', pageSource);
-  }, []);
 
   return (
     <>
