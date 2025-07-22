@@ -30,6 +30,7 @@ interface WaitlistPayload {
     lastName: string;
     email: string;
     phone: string | '';
+    pageSource?: string;
     referrer?: string;
     token: string;
 }
@@ -40,7 +41,7 @@ interface WaitlistPayload {
  * @returns An object indicating success status, a message, and a status code.
  */
 export async function handleWaitlistSubmission(payload: WaitlistPayload) {
-  const { firstName, lastName, email, phone, referrer, token } = payload;
+  const { firstName, lastName, email, phone, pageSource, referrer, token } = payload;
 
   if (!token || !(await verifyRecaptcha(token))) {
     logger.error("reCAPTCHA verification failed. Rejecting submission.");
@@ -54,12 +55,12 @@ export async function handleWaitlistSubmission(payload: WaitlistPayload) {
     return { success: false, message: 'This email address has already been submitted.', status: 409 };
   }
 
-  const newSubmission = new WaitlistSubmission({ firstName, lastName, email, phone, referrer });
+  const newSubmission = new WaitlistSubmission({ firstName, lastName, email, phone, pageSource, referrer });
   await newSubmission.save();
   logger.info('New waitlist submission saved successfully to database', { email });
 
   // Fire off both webhook calls from the server
-  sendToPabbly({ firstName, lastName, email, phone, referrer });
+  sendToPabbly({ firstName, lastName, email, phone, pageSource, referrer });
   // sendToKeap({ firstName, lastName, email, phone });
   
   return { success: true, message: 'Successfully joined the waitlist!', status: 201 };

@@ -38,6 +38,11 @@ const WaitlistSubmissionSchema = new Schema({
     trim: true,
     default: 'Direct',
   },
+  pageSource: {
+    type: String,
+    trim: true,
+    default: 'Direct',
+  },
 }, {
   timestamps: true,
 });
