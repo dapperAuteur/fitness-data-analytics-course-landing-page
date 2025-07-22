@@ -153,19 +153,6 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
     );
   }
 
-  // const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-
-  // if (!recaptchaSiteKey) {
-  //   // A simple error message if the key is missing
-  //   return (
-  //       <div className="flex items-center justify-center h-screen">
-  //           <p className="text-red-500 bg-red-100 p-4 rounded-lg">reCAPTCHA Site Key is not configured. Please check your environment variables.</p>
-  //       </div>
-  //   );
-  // }
-
-  
-
   useEffect(() => {
     setReferrer(document.referrer);
     setpageSourceState(pageSource);
@@ -173,71 +160,6 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
     console.log('referrer :>> ', referrer);
     console.log('pageSource :>> ', pageSource);
   }, []);
-
-  // return (
-  //   <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-2xl">
-  //     {/* <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey}> */}
-  //       {!isSubmitted ? (
-  //         <>
-  //           <div className="text-center mb-8">
-  //             <h2 className="text-4xl font-bold text-gray-900 mb-4">Start Your Centenarian Journey Today</h2>
-  //             <p className="text-xl text-gray-600">Join our waitlist to be the first to know when enrollment opens.</p>
-  //           </div>
-  //           <form onSubmit={handleSubmit} noValidate>
-  //             <div className="space-y-6 text-gray-900">
-  //               <div className="grid md:grid-cols-2 gap-6 text-gray-950">
-  //                 <div>
-  //                   <label className="block text-sm font-medium mb-2">First Name *</label>
-  //                   <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} className={`w-full px-4 py-3 border rounded-lg focus:ring-2 ${errors.firstName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-500'}`} placeholder="Enter your first name" />
-  //                   {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
-  //                 </div>
-  //                 <div>
-  //                   <label className="block text-sm font-medium mb-2">Last Name *</label>
-  //                   <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className={`w-full px-4 py-3 border rounded-lg focus:ring-2 ${errors.lastName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-500'}`} placeholder="Enter your last name" />
-  //                   {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
-  //                 </div>
-  //               </div>
-  //               <div>
-  //                 <label className="block text-sm font-medium mb-2">Email Address *</label>
-  //                 <input type="email" name="email" value={formData.email} onChange={handleInputChange} className={`w-full px-4 py-3 border rounded-lg focus:ring-2 ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-500'}`} placeholder="Enter your email" />
-  //                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-  //               </div>
-  //               <div>
-  //                 <label className="block text-sm font-medium mb-2">Phone Number</label>
-  //                 <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={`w-full px-4 py-3 border rounded-lg focus:ring-2 ${errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-500'}`} placeholder="+11234567890" />
-  //                 {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-  //               </div>
-  //               {serverError && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">{serverError}</div>}
-  //               <button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold py-4 px-8 rounded-lg hover:from-purple-700 hover:to-fuchsia-700 transition-all duration-200 flex items-center justify-center gap-2 text-lg disabled:opacity-50">
-  //                 {isSubmitting ? 'Submitting...' : 'Join the Waitlist'}
-  //                 {!isSubmitting && <ArrowRight className="w-5 h-5" />}
-  //               </button>
-  //             </div>
-  //             <ShareButtons />
-  //           </form>
-  //         </>
-  //       ) : (
-  //           <div className="text-center py-8">
-  //             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-  //                 <Check className="w-8 h-8 text-green-600" />
-  //             </div>
-  //             <h3 className="text-3xl font-bold text-gray-900 mb-4">Thank You!</h3>
-  //             <p className="text-xl text-gray-600 mb-6">You're on the waitlist! We'll notify you when enrollment opens.</p>
-  //             <p className="text-gray-600 mb-8">In the meantime, share this opportunity with others!</p>
-  //             <button
-  //               type="button"
-  //               onClick={resetFormAndGoBack}
-  //               className="w-full bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold py-4 px-8 rounded-lg hover:from-purple-700 hover:to-fuchsia-700 transition-all duration-200 flex items-center justify-center gap-2 text-lg disabled:opacity-50"
-  //             >
-  //               <ArrowLeft className="w-5 h-5" />
-  //               Submit Another Response
-  //             </button>
-  //             <ShareButtons />
-  //         </div>
-  //       )}
-  //     {/* </GoogleReCaptchaProvider> */}
-  //   </div>
-  // );
 
   return (
     <>
