@@ -4,40 +4,7 @@ import dbConnect from '@/lib/db/dbConnect';
 import WaitlistSubmission from '@/models/WaitlistSubmission';
 import logger from '@/logging/logger';
 import { sendToPabbly } from '@/lib/pabbly';
-
-// --- Service-specific logic for Keap ---
-async function sendToKeap(data: { firstName: string; lastName: string; email: string; phone?: string; }) {
-  const keapFormId = process.env.NEXT_PUBLIC_KEAP_FORM_ID || 'kq169';
-  const keapFormName = process.env.NEXT_PUBLIC_KEAP_FORM_NAME || 'fda-landing-page';
-  const keapFormUrl = `https://keap.page/form-submit/${keapFormId}`;
-
-  const formData = new URLSearchParams();
-  formData.append('inf_form_xid', keapFormId);
-  formData.append('inf_form_name', keapFormName);
-  formData.append('infusionsoft_version', '1.70.0.59431');
-  formData.append('inf_field_FirstName', data.firstName);
-  formData.append('inf_field_LastName', data.lastName);
-  formData.append('inf_field_Email', data.email);
-  if (data.phone) {
-    formData.append('inf_field_Phone1', data.phone);
-  }
-
-  logger.info("Sending data to Keap...", { email: data.email });
-  try {
-    const response = await fetch(keapFormUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
-    });
-    if (!response.ok) {
-      logger.error("Failed to send data to Keap.", { statusCode: response.status });
-    } else {
-      logger.info("Successfully sent data to Keap.", { email: data.email });
-    }
-  } catch (error: any) {
-    logger.error("An unexpected error occurred while calling the Keap API.", { errorMessage: error.message });
-  }
-}
+// import { sendToKeap } from '@/lib/keap';
 
 // --- Service-specific logic for reCAPTCHA ---
 async function verifyRecaptcha(token: string): Promise<boolean> {
@@ -93,7 +60,7 @@ export async function handleWaitlistSubmission(payload: WaitlistPayload) {
 
   // Fire off both webhook calls from the server
   sendToPabbly({ firstName, lastName, email, phone, referrer });
-  sendToKeap({ firstName, lastName, email, phone });
+  // sendToKeap({ firstName, lastName, email, phone });
   
   return { success: true, message: 'Successfully joined the waitlist!', status: 201 };
 }
