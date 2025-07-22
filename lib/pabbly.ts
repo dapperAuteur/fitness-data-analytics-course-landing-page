@@ -5,6 +5,7 @@ interface SubmissionData {
   lastName: string;
   email: string;
   phone: string;
+  pageSource?: string;
   referrer?: string;
 }
 
@@ -23,7 +24,11 @@ export async function sendToPabbly(data: SubmissionData): Promise<void> {
     return;
   }
 
-  logger.info("Sending data to Pabbly webhook...", { email: data.email });
+  logger.info("Sending data to Pabbly webhook...", {
+    email: data.email,
+    pageSource: data.pageSource,
+    referrer: data.referrer,
+  });
 
   try {
     const response = await fetch(webhookUrl, {
