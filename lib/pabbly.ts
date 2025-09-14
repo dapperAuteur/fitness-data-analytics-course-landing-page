@@ -1,4 +1,4 @@
-import logger from "@/logging/logger"; // Adjust path to your logger if needed
+import logger, { LogContext } from "@/logging/logger"; // Adjust path to your logger if needed
 
 interface SubmissionData {
   firstName: string;
@@ -20,14 +20,16 @@ export async function sendToPabbly(data: SubmissionData): Promise<void> {
   const webhookUrl = process.env.PABBLY_ORDER_WEBHOOK;
 
   if (!webhookUrl) {
-    logger.error("Pabbly webhook URL is not configured. Skipping webhook call.");
+    logger.error(LogContext.PABBLY, "Pabbly webhook URL is not configured. Skipping webhook call.");
     return;
   }
 
-  logger.info("Sending data to Pabbly webhook...", {
-    email: data.email,
-    pageSource: data.pageSource,
-    referrer: data.referrer,
+  logger.info(LogContext.PABBLY, "Sending data to Pabbly webhook...", {
+    metadata: {
+      email: data.email,
+      pageSource: data.pageSource,
+      referrer: data.referrer,
+    }
   });
 
   try {
@@ -43,19 +45,25 @@ export async function sendToPabbly(data: SubmissionData): Promise<void> {
       // Log the error but don't throw, to avoid breaking the user-facing flow.
       // Pabbly isn't triggering for the deployed version. Why?
       const errorBody = await response.text();
-      logger.error("Failed to send data to Pabbly webhook.", {
-        statusCode: response.status,
-        response: errorBody,
+      logger.error(LogContext.PABBLY, "Failed to send data to Pabbly webhook.", {
+        metadata: {
+          statusCode: response.status,
+          response: errorBody,
+        }
       });
     } else {
-      logger.info("Successfully sent data to Pabbly webhook.", {
-        email: data.email,
+      logger.info(LogContext.PABBLY, "Successfully sent data to Pabbly webhook.", {
+        metadata: {
+          email: data.email,
+        }
       });
     }
   } catch (error: any) {
-    logger.error("An unexpected error occurred while calling the Pabbly webhook.", {
-      errorMessage: error.message,
-      stack: error.stack,
+    logger.error(LogContext.PABBLY, "An unexpected error occurred while calling the Pabbly webhook.", {
+      metadata: {
+        errorMessage: error.message,
+        stack: error.stack,
+      }
     });
   }
 }
