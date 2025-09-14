@@ -38,21 +38,18 @@ const FitnessAnalyticsLanding = () => {
       </section>
       <CourseOverview />
       <WeeklyBreakdown />
-      <Specialization />
-          
+      <Specialization /> 
         <div className="relative z-10 container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
-        {/* Lead Magnet Form Section */}
-        <section id="join-waitlist">
-          <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-2xl">
-            <WaitlistForm pageSource="Fitness Analytics Landing Page" />
+            {/* Lead Magnet Form Section */}
+            <section id="join-waitlist">
+              <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-2xl">
+                <WaitlistForm pageSource="Fitness Analytics Landing Page" />
+              </div>
+            </section>
+            <ShareSection />
           </div>
-        </section>
-        <ShareSection />
         </div>
-        </div>
-          
-          {/* ... Footer remains the same ... */}
         <Footer />
       </div>
     </GoogleReCaptchaProvider>
