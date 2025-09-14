@@ -12,7 +12,8 @@ export enum LogContext {
   AUTH = "auth",
   WAITLIST = "waitlist",
   SYSTEM = "system",
-  API = "api"
+  API = "api",
+  PABBLY = "pabbly"
 }
 
 interface LogEntry {

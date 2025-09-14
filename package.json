@@ -16,14 +16,11 @@
     "mongoose": "^8.16.3",
     "next": "15.4.1",
     "next-auth": "^4.24.11",
-    "pino": "^9.7.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-google-recaptcha-v3": "^1.11.0",
     "react-hook-form": "^7.60.0",
     "react-share": "^5.2.2",
-    "swr": "^2.3.4",
-    "winston": "^3.17.0",
     "zod": "^4.0.5"
   },
   "devDependencies": {

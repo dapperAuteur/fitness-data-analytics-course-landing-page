@@ -7,7 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import PasswordStrengthMeter from '@/components/ui/PasswordStrengthMeter';
-import clientLogger from "@/logging/clientLogger";
+import clientLogger, { ClientLogContext } from "@/logging/clientLogger";
 
 // Replace the existing signUpSchema with this enhanced version
 const signUpSchema = z.object({
@@ -51,7 +51,7 @@ export default function SignUpForm() {
           password: data.password
         })
       }).catch(error => {
-        clientLogger.error("Fetch error:", {
+        clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION, "Fetch error:", {
           error,
           email: data.email
         })
@@ -64,7 +64,7 @@ export default function SignUpForm() {
       const result = await response.json();
       
       if (!response.ok) {
-        clientLogger.error("Fetch error:", {
+        clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION, "Fetch error:", {
           error: result.error,
           email: data.email,
           result
@@ -76,7 +76,7 @@ export default function SignUpForm() {
       // Redirect to sign-in page with success message
       router.push("/signin?registered=true");
     } catch (error: any) {
-        clientLogger.error("Registration error:", {
+        clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION, "Registration error:", {
           error,
           message: error.message,
           email: data.email

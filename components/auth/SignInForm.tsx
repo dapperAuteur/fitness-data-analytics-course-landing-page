@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import clientLogger from "@/logging/clientLogger";
+import clientLogger, { ClientLogContext } from "@/logging/clientLogger";
 
 // Validation schema for sign in form
 const signInSchema = z.object({
@@ -47,7 +47,7 @@ export default function SignInForm() {
         setError(data.error || "Failed to resend verification email");
       }
     } catch (error) {
-      clientLogger.error("Resend verification error:", {
+      clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION,"Resend verification error:", {
         error,
         resendEmail
       })
@@ -74,14 +74,14 @@ export default function SignInForm() {
       });
       
       if (result?.error) {
-        clientLogger.error("Sign in error:", {
+        clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION,"Sign in error:", {
           error: result.error,
           email: data.email,
           result
         })
         // Check for specific error types
       if (result.error.includes("email_not_verified")) {
-        clientLogger.error("Sign in error: result.error.includes(email_not_verified)", {
+        clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION,"Sign in error: result.error.includes(email_not_verified)", {
           error: result.error,
           email: data.email
         });
@@ -100,7 +100,7 @@ export default function SignInForm() {
       router.push("/generate");
       router.refresh(); // Refresh the page to update the session
     } catch (error: any) {
-        clientLogger.error("Sign in error:", {
+        clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION,"Sign in error:", {
           error: error.message || "Failed to connect to authentication server",
           email: data.email
         });
