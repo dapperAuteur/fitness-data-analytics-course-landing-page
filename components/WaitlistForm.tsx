@@ -3,7 +3,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
-import clientLogger from '../logging/clientLogger';
+import clientLogger, { ClientLogContext } from '../logging/clientLogger';
 import ShareButtons from '@/components/ShareButtons';
 
 interface FormValues {
@@ -55,7 +55,7 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
     
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-        clientLogger.warn('Client-side validation failed', { errors: newErrors });
+        clientLogger.warn(ClientLogContext.USER_FORM_SUBMISSION, 'Client-side validation failed', { errors: newErrors });
     }
     return Object.keys(newErrors).length === 0;
   };
@@ -71,13 +71,13 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
 
     // NEW: Check if reCAPTCHA is ready
     if (!executeRecaptcha) {
-      clientLogger.error("reCAPTCHA not available yet");
+      clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION, "reCAPTCHA not available yet");
       setServerError("Verification service is not ready. Please try again in a moment.");
       return;
     }
 
     setIsSubmitting(true);
-    clientLogger.info('Submitting waitlist form', { formData });
+    clientLogger.info(ClientLogContext.USER_FORM_SUBMISSION, 'Submitting waitlist form', { formData });
 
     // NEW: Get reCAPTCHA token
     const token = await executeRecaptcha('3pageEbook');
@@ -97,7 +97,7 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
             throw new Error(result.message || 'An unknown error occurred.');
         }
 
-        clientLogger.info('Waitlist submission successful');
+        clientLogger.info(ClientLogContext.USER_FORM_SUBMISSION, 'Waitlist submission successful');
 
         // --- NEW: If successful, also send to Keap ---
         // This is a "fire-and-forget" call so it doesn't slow down the UI.
@@ -105,7 +105,7 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
 
         setIsSubmitted(true);
     } catch (error: any) {
-        clientLogger.error('Waitlist submission failed', { error: error.message });
+        clientLogger.error(ClientLogContext.USER_FORM_SUBMISSION, 'Waitlist submission failed', { error: error.message });
         setServerError(error.message as string);
     } finally {
         setIsSubmitting(false);
@@ -134,7 +134,7 @@ export default function WaitlistForm({ pageSource }: { pageSource: string }) {
   useEffect(() => {
     setReferrer(document.referrer);
     setpageSourceState(pageSource);
-    clientLogger.info('Landing page loaded', { referrer: document.referrer });
+    clientLogger.info(ClientLogContext.USER_FORM_SUBMISSION, 'Landing page loaded', { referrer: document.referrer });
     console.log('referrer :>> ', referrer);
     console.log('pageSource :>> ', pageSource);
   }, [pageSource]);
