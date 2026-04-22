@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FDAC — Fitness Data Analytics Course
 
-## Getting Started
+Lead capture for BAM's data-informed training course.
 
-First, run the development server:
+## About
+
+Public site at [fdac.witus.online](https://fdac.witus.online). One job: capture waitlist
+leads for a niche fitness-data course aimed at coaches, trainers, and data-curious
+athletes. Verified submissions feed the [CentenarianOS](https://centenarianos.com)
+coaching funnel — this repo stops at "got the lead"; coaching intake, nurture, payment,
+and course delivery live elsewhere. Operated by B4C LLC. Built by
+[Brand Anthony McDonald](https://brandanthonymcdonald.com).
+
+## Ecosystem Positioning
+
+| Sibling | Relationship |
+|---|---|
+| [CentenarianOS](https://centenarianos.com) | Coaching funnel FDAC leads feed into |
+| [FlashLearnAI](https://flashlearnai.witus.online) | Companion training-knowledge decks for course students |
+| [brandanthonymcdonald.com](https://brandanthonymcdonald.com) | BAM portfolio + other class landings |
+| [WitUS.online](https://witus.online) | Ecosystem umbrella + product directory |
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript 5 / React 19 |
+| Styling | Tailwind CSS v4 |
+| Database | MongoDB via Mongoose 8 |
+| Auth | NextAuth v4 (scaffolded for future admin; landing is anonymous) |
+| Forms | React Hook Form + Zod |
+| Bot gate | Google reCAPTCHA v3 |
+| CRM + webhook | Keap REST API + Pabbly relay |
+| Hosting | Vercel (with Vercel Analytics) |
+
+## Routes
+
+| Route | Description |
+|---|---|
+| `/` | Landing — hero, course overview, weekly breakdown, specialization, waitlist form, share |
+| `/foundations-of-fitness-and-health-metrics-waitlist-preview-3-page-ebook` | 3-page ebook lead magnet |
+| `POST /api/waitlist` | Submission endpoint: reCAPTCHA verify, Mongo write, Pabbly + Keap push |
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # fill in real values; see file for the full var list
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/
+  layout.tsx, page.tsx, globals.css   # root layout + landing page
+  (ebook-pages)/                      # route group for ebook lead magnets
+  api/waitlist/route.ts               # POST waitlist submission handler
+components/                           # Hero, WaitlistForm, ShareSection, Footer, auth/*, ui/*
+lib/
+  db/dbConnect.ts                     # Mongoose connection helper
+  services/waitlistService.ts         # waitlist business logic
+  pabbly.ts                           # Pabbly webhook client
+  tokens.ts                           # email verification tokens
+logging/                              # server + client logger
+models/                               # Mongoose schemas (User, WaitlistSubmission)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment
 
-## Learn More
+Deployed on Vercel. Pushes to `main` trigger production deploys; PR branches get preview
+URLs. Configure env vars in Vercel → Settings → Environment Variables using the keys in
+[`.env.example`](./.env.example). Preview deploys should not carry live Pabbly/Keap
+secrets. Manual prod deploy: `npx vercel --prod`.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Proprietary — B4C LLC. All rights reserved.
