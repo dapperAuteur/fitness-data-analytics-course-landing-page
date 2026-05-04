@@ -65,7 +65,9 @@ export async function submitLead(input: SubmitLeadInput): Promise<{ ok: false; e
         received_at: lead.receivedAt,
       },
     });
-    if (result.ok && result.detail !== "dev-log") {
+    // Only mark sent_to_inbox_at on a real receiver-acked write (id assigned).
+    // Dev-log mode (env vars missing) returns ok:true without id and is skipped.
+    if (result.ok && result.id) {
       await markSentToInbox(lead.id);
     }
   });
