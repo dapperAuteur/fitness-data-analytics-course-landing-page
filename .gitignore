@@ -37,6 +37,9 @@ yarn-error.log*
 # ecosystem planning docs (local-only per plans/ecosystem/adoption-kit.md)
 plans/
 
+# local Claude Code permissions / IDE config
+.claude/
+
 # rebuild rollback safety (Phase 1 of feat/01-rebuild)
 _archive/
 
