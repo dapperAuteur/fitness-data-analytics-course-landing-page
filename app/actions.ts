@@ -50,7 +50,7 @@ export async function submitLead(input: SubmitLeadInput): Promise<{ ok: false; e
     };
   }
 
-  const downloadUrl = buildEbookUrl({ slug: FOUNDATIONS_SLUG, leadId: lead.id });
+  const downloadUrl = await buildEbookUrl({ slug: FOUNDATIONS_SLUG, leadId: lead.id });
 
   after(async () => {
     const result = await postToInbox({

@@ -1,18 +1,40 @@
-// Phase 8 stub — replaced with signed JWT helpers.
-// Current behavior: returns the unsigned ebook URL (still works locally; not safe for prod).
-//
-// Wire shape (Phase 8):
-//   - signEbookToken({ slug, leadId }) -> JWT (HS256 over EBOOK_JWT_SECRET, exp +24h)
-//   - verifyEbookToken(token) -> { slug, leadId } | throws
-//   - URL: ${EBOOK_BASE_URL}/ebook/<slug>?t=<jwt>
+import { SignJWT, jwtVerify } from "jose";
+import { getEbookBaseUrl, getEnv } from "@/lib/env";
 
-import { getEbookBaseUrl } from "@/lib/env";
+const ALG = "HS256";
+const EXP = "24h";
 
 export const FOUNDATIONS_SLUG = "foundations-3-page";
 
-export function buildEbookUrl(opts: { slug: string; leadId: string }): string {
+interface EbookPayload {
+  slug: string;
+  leadId: string;
+}
+
+function getKey(): Uint8Array {
+  return new TextEncoder().encode(getEnv().EBOOK_JWT_SECRET);
+}
+
+export async function signEbookToken(payload: EbookPayload): Promise<string> {
+  return await new SignJWT({ slug: payload.slug, leadId: payload.leadId })
+    .setProtectedHeader({ alg: ALG })
+    .setIssuedAt()
+    .setExpirationTime(EXP)
+    .sign(getKey());
+}
+
+export async function verifyEbookToken(token: string): Promise<EbookPayload | null> {
+  try {
+    const { payload } = await jwtVerify(token, getKey(), { algorithms: [ALG] });
+    if (typeof payload.slug !== "string" || typeof payload.leadId !== "string") return null;
+    return { slug: payload.slug, leadId: payload.leadId };
+  } catch {
+    return null;
+  }
+}
+
+export async function buildEbookUrl(opts: EbookPayload): Promise<string> {
+  const token = await signEbookToken(opts);
   const base = getEbookBaseUrl();
-  // Phase 8 swaps this for a JWT-signed URL.
-  const t = `unsigned-${opts.leadId}`;
-  return `${base}/ebook/${opts.slug}?t=${encodeURIComponent(t)}`;
+  return `${base}/ebook/${opts.slug}?t=${encodeURIComponent(token)}`;
 }

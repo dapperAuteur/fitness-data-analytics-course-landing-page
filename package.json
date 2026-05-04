@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run build:ebook",
     "dev": "next dev",
+    "build:ebook": "tsx scripts/build-ebook.tsx",
+    "prebuild": "npm run build:ebook",
     "build": "tsx scripts/validate-env.ts && next build",
     "start": "next start",
     "lint": "eslint",
@@ -14,11 +17,11 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.1.0",
-    "@react-pdf/renderer": "^4.5.1",
     "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
+    "jose": "^6.2.3",
     "lucide-react": "^1.14.0",
     "next": "16.2.4",
     "react": "19.2.4",
@@ -29,6 +32,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@react-pdf/renderer": "^4.5.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
