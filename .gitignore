@@ -32,6 +32,13 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# ecosystem planning docs (local-only per plans/ecosystem/adoption-kit.md)
+plans/
+
+# rebuild rollback safety (Phase 1 of feat/01-rebuild)
+_archive/
 
 # vercel
 .vercel
