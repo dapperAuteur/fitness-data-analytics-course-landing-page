@@ -13,10 +13,42 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://fdac.witus.online";
+const SITE_NAME = "FDAC";
+const TITLE = "Foundations of Fitness and Health Metrics — FDAC";
+const DESCRIPTION =
+  "Learn to harness the power of personal metrics for better health decisions. A 5-week course for coaches, trainers, and data-curious athletes who want to turn fitness data into longevity insights.";
+
 export const metadata: Metadata = {
-  title: "Foundations of Fitness and Health Metrics — FDAC",
-  description:
-    "Learn to harness the power of personal metrics for better health decisions. Transform your body's data into actionable insights for extraordinary longevity.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: "%s — FDAC" },
+  description: DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: "Brand Anthony McDonald", url: "https://brandanthonymcdonald.com" }],
+  keywords: [
+    "fitness data analytics",
+    "health metrics",
+    "wearable data",
+    "longevity",
+    "intensity minutes",
+    "centenarian",
+    "B4C LLC",
+  ],
+  alternates: { canonical: SITE_URL },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  category: "education",
 };
 
 export default function RootLayout({
