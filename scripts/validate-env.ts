@@ -1,5 +1,10 @@
-import "dotenv/config";
+import { config } from "dotenv";
 import { z } from "zod";
+
+// Standalone tools (tsx scripts) don't get Next's automatic .env.local loader,
+// so load it explicitly. .env.local overrides .env, both are read.
+config({ path: ".env.local" });
+config({ path: ".env" });
 
 const REQUIRED_ALWAYS = z.object({
   STORAGE_DATABASE_URL: z.string().min(1),
