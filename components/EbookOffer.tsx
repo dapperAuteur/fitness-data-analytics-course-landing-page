@@ -14,7 +14,7 @@ export function EbookOffer({ children }: { children: ReactNode }) {
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-start">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-sm font-medium ring-1 ring-white/25">
+            <p className="inline-flex items-center gap-2 rounded-full bg-cyan-900/60 px-3 py-1 text-sm font-medium ring-1 ring-cyan-300/40">
               <Download className="h-4 w-4" aria-hidden="true" />
               Free 3-page guide
             </p>

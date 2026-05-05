@@ -10,7 +10,7 @@ export function Hero() {
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <p className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium ring-1 ring-white/25">
+            <p className="mb-6 inline-flex items-center gap-2 rounded-full bg-cyan-900/60 px-4 py-2 text-sm font-medium ring-1 ring-cyan-300/40">
               <Star className="h-4 w-4" aria-hidden="true" />
               Part of the World&apos;s Fastest Centenarian Specialization
             </p>
@@ -32,7 +32,7 @@ export function Hero() {
               ].map(({ icon: Icon, label }) => (
                 <li
                   key={label}
-                  className="inline-flex items-center gap-2 rounded-lg bg-white/15 px-3 py-2 text-sm ring-1 ring-white/20"
+                  className="inline-flex items-center gap-2 rounded-lg bg-cyan-900/60 px-3 py-2 text-sm ring-1 ring-cyan-300/40"
                 >
                   <Icon className="h-5 w-5" aria-hidden="true" />
                   <span>{label}</span>
@@ -49,7 +49,7 @@ export function Hero() {
               </Link>
               <a
                 href="#join-waitlist"
-                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/15 px-6 py-3 text-base font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-cyan-900/70 px-6 py-3 text-base font-semibold text-white ring-1 ring-cyan-200/50 transition hover:bg-cyan-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Notify me when enrollment opens
               </a>
@@ -60,10 +60,10 @@ export function Hero() {
               <p className="sr-only">Sample of metrics tracked by graduates of this course.</p>
               <div className="grid grid-cols-2 gap-4 sm:gap-6">
                 {[
-                  { icon: Heart, value: "72 BPM", label: "Resting Heart Rate", tone: "from-cyan-400 to-teal-500" },
-                  { icon: Activity, value: "8,547", label: "Daily Steps", tone: "from-sky-400 to-cyan-500" },
-                  { icon: Target, value: "150/75", label: "Intensity Minutes", tone: "from-blue-400 to-sky-500" },
-                  { icon: Zap, value: "87%", label: "Sleep Quality", tone: "from-teal-400 to-emerald-500" },
+                  { icon: Heart, value: "72 BPM", label: "Resting Heart Rate", tone: "from-cyan-600 to-teal-700" },
+                  { icon: Activity, value: "8,547", label: "Daily Steps", tone: "from-sky-600 to-cyan-700" },
+                  { icon: Target, value: "150/75", label: "Activity Minutes", tone: "from-blue-600 to-sky-700" },
+                  { icon: Zap, value: "87%", label: "Sleep Quality", tone: "from-teal-600 to-emerald-700" },
                 ].map(({ icon: Icon, value, label, tone }) => (
                   <div
                     key={label}
@@ -71,7 +71,7 @@ export function Hero() {
                   >
                     <Icon className="mb-3 h-7 w-7" aria-hidden="true" />
                     <div className="text-2xl font-bold sm:text-3xl">{value}</div>
-                    <div className="text-xs opacity-90 sm:text-sm">{label}</div>
+                    <div className="text-xs sm:text-sm">{label}</div>
                   </div>
                 ))}
               </div>
