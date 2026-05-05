@@ -1,15 +1,16 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { headers } from "next/headers";
 import { NextRequest } from "next/server";
-import { markEbookDelivered } from "@/lib/db-safe";
-import { verifyEbookToken } from "@/lib/ebook";
+import { after } from "next/server";
+import { logDownload } from "@/lib/db-safe";
 
 const EBOOK_ROOT = join(process.cwd(), "app", "ebooks");
 
 const ALLOWED_SLUGS = new Set(["foundations-3-page"]);
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
 ): Promise<Response> {
   const { slug } = await params;
@@ -17,25 +18,22 @@ export async function GET(
     return new Response("Not found", { status: 404 });
   }
 
-  const token = req.nextUrl.searchParams.get("t");
-  if (!token) {
-    return expiredResponse();
-  }
-
-  const decoded = await verifyEbookToken(token);
-  if (!decoded || decoded.slug !== slug) {
-    return expiredResponse();
-  }
-
   let pdf: Buffer;
   try {
     pdf = await readFile(join(EBOOK_ROOT, `${slug}.pdf`));
   } catch {
-    return new Response("Ebook not generated yet — run `npm run build:ebook`.", { status: 404 });
+    return new Response("Ebook not generated yet. Run `npm run build:ebook`.", { status: 404 });
   }
 
-  // Best-effort logging of delivery; never blocks response.
-  void markEbookDelivered(decoded.leadId);
+  const headerList = await headers();
+  const ip =
+    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ?? headerList.get("x-real-ip") ?? null;
+  const userAgent = headerList.get("user-agent") ?? null;
+
+  // Fire-and-forget; never blocks the download.
+  after(async () => {
+    await logDownload({ slug, sessionId: null, ip, userAgent });
+  });
 
   return new Response(pdf as unknown as BodyInit, {
     status: 200,
@@ -47,11 +45,4 @@ export async function GET(
       "Content-Length": String(pdf.length),
     },
   });
-}
-
-function expiredResponse(): Response {
-  return new Response(
-    "Link expired — request a fresh download from your email or by re-submitting the waitlist form.",
-    { status: 401, headers: { "Content-Type": "text/plain; charset=utf-8" } },
-  );
 }

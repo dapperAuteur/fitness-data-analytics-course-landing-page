@@ -124,12 +124,12 @@ function InnerLeadForm() {
         disabled={isPending}
         className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-cyan-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-cyan-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isPending ? "Sending…" : "Get the free guide + waitlist spot"}
+        {isPending ? "Sending…" : "Notify me when enrollment opens"}
       </button>
 
       <p className="text-xs text-slate-600">
-        Protected by Google reCAPTCHA. By submitting you agree to receive course updates by email; we
-        don&apos;t share your data.
+        Protected by Google reCAPTCHA. By submitting you agree to receive course-launch emails. We
+        will not share your data.
       </p>
     </form>
   );
