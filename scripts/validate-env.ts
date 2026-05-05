@@ -49,8 +49,8 @@ if (errors.length > 0) {
   console.error("[validate-env] missing or invalid environment variables:");
   console.error(errors.join("\n"));
   console.error(
-    "\nProvision per plans/21-fdac-ecs-rebuild-secret-provisioning.md §A–§D " +
-      "(Keap rows on the backlog), then re-run.\n" +
+    "\nProvision per plans/21-fdac-ecs-rebuild-secret-provisioning.md §A–§D, " +
+      "skipping the CRM rows (out of scope for this rebuild — see plan deltas).\n" +
       "To bypass during early-rebuild local dev, set SKIP_ENV_VALIDATION=true.",
   );
   process.exit(1);
