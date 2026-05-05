@@ -38,12 +38,19 @@ export function Hero() {
                 </li>
               ))}
             </ul>
-            <div className="mt-10">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <a
-                href="#join-waitlist"
+                href="/ebooks/foundations-3-page.pdf"
+                download
                 className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white px-6 py-3 text-base font-semibold text-cyan-700 shadow-sm transition hover:bg-cyan-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
-                Join the waitlist + grab the free guide
+                Download the free guide
+              </a>
+              <a
+                href="#join-waitlist"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/15 px-6 py-3 text-base font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                Notify me when enrollment opens
               </a>
             </div>
           </div>

@@ -42,6 +42,7 @@ plans/
 
 # generated ebook binaries — produced by `npm run build:ebook`
 # (regenerable from lib/ebook-doc.tsx; not committed)
+public/ebooks/*.pdf
 app/ebooks/*.pdf
 
 # rebuild rollback safety (Phase 1 of feat/01-rebuild)

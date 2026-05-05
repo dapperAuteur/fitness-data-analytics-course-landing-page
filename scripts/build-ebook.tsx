@@ -3,7 +3,7 @@ import { dirname, resolve } from "node:path";
 import { renderToFile } from "@react-pdf/renderer";
 import { FoundationsEbookDoc } from "../lib/ebook-doc";
 
-const out = resolve(process.cwd(), "app/ebooks/foundations-3-page.pdf");
+const out = resolve(process.cwd(), "public/ebooks/foundations-3-page.pdf");
 
 async function main() {
   await mkdir(dirname(out), { recursive: true });
