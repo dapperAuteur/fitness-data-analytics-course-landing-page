@@ -16,12 +16,12 @@ const faqs = [
     a: "No. The course is educational content for healthy adults learning to interpret their own metrics. It is not a substitute for advice from a qualified medical professional.",
   },
   {
-    q: "What happens after I join the waitlist?",
-    a: "You receive an immediate download link for the free 3-page foundations guide, plus an email when enrollment opens for the next cohort.",
+    q: "Do I need to give my email to read the free guide?",
+    a: "No. You can download the 3-page foundations guide directly from the homepage with no signup. The contact form is for people who want updates when course enrollment opens.",
   },
   {
-    q: "Can I get a refund if it isn't a fit?",
-    a: "Yes. The course ships with a 14-day money-back window — review the first two weeks of materials with your own data, and if it isn't worth your time, we issue a full refund.",
+    q: "What is the refund policy?",
+    a: "All course sales are final. Read the syllabus, browse the free 3-page guide, and ask any pre-purchase questions before you enroll.",
   },
 ];
 
