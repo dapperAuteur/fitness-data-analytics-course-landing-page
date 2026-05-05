@@ -7,7 +7,6 @@ import { z } from "zod";
 import { upsertLead, markSentToInbox } from "@/lib/db-safe";
 import { verifyRecaptcha } from "@/lib/recaptcha";
 import { postToInbox } from "@/lib/inbox";
-import { buildEbookUrl, FOUNDATIONS_SLUG } from "@/lib/ebook";
 
 const LeadSchema = z.object({
   email: z.string().email().max(255),
@@ -50,8 +49,6 @@ export async function submitLead(input: SubmitLeadInput): Promise<{ ok: false; e
     };
   }
 
-  const downloadUrl = await buildEbookUrl({ slug: FOUNDATIONS_SLUG, leadId: lead.id });
-
   after(async () => {
     const result = await postToInbox({
       formType: "course-lead",
@@ -63,16 +60,13 @@ export async function submitLead(input: SubmitLeadInput): Promise<{ ok: false; e
         ip: lead.ip,
         user_agent: lead.userAgent,
         received_at: lead.receivedAt,
+        intent: "notify-on-enrollment",
       },
     });
-    // Only mark sent_to_inbox_at on a real receiver-acked write (id assigned).
-    // Dev-log mode (env vars missing) returns ok:true without id and is skipped.
     if (result.ok && result.id) {
       await markSentToInbox(lead.id);
     }
   });
 
-  redirect(
-    `/thanks?email=${encodeURIComponent(lead.email)}&download=${encodeURIComponent(downloadUrl)}`,
-  );
+  redirect(`/thanks?email=${encodeURIComponent(lead.email)}`);
 }
