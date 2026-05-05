@@ -26,6 +26,8 @@ This version (Next 16) has breaking changes — APIs, conventions, and file stru
 - Next 16: use `proxy.ts`, not `middleware.ts`. FDAC has no auth-gated routes today, so no proxy.ts is needed yet.
 - `plans/` is gitignored. **Never commit `.env*`** except `.env.example`. `_archive/` is gitignored (rebuild rollback safety; safe to delete after the rebuild branch merges).
 - Every plan ships on its own branch. **Never push to `main`** — user reviews + pushes
+- **Push completed feature branches to `origin`.** Once a branch is finished and the local build/lint passes, push the branch (`git push -u origin <branch>`). Vercel preview-deploys the branch. BAM reviews the preview + the diff and either merges-and-pushes from there or pulls + merges locally. Still **never** push to `main`. Never force-push without explicit approval. Never push a branch that fails its own build.
+- **Small branches, one concern each.** A branch addresses one user ask, one bug, or one focused refactor. New ask = new branch. Resist bundling unrelated work even when "it's right there." Bundled branches make review harder, partial-merge impossible, and reverts surgical-instead-of-clean. If a single ask spans multiple files (e.g., a footer rewrite touches Footer.tsx + a constants file), that's still one concern; if two unrelated asks land in the same conversation turn, they get two branches.
 - **Cross-repo edits:** branch in the sibling, user-task in origin queue for merge/push
 
 **Local port convention:** FDAC dev runs on `localhost:3000`; witus-inbox dev runs on `localhost:3001`. Local `INBOX_INGEST_URL = http://localhost:3001/api/ingest`.

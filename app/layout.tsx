@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 
 const SITE_URL = "https://fdac.witus.online";
 const SITE_NAME = "FDAC";
-const TITLE = "Foundations of Fitness and Health Metrics — FDAC";
+const TITLE = "Foundations of Fitness and Health Metrics | FDAC";
 const DESCRIPTION =
   "Learn to harness the power of personal metrics for better health decisions. A 5-week course for coaches, trainers, and data-curious athletes who want to turn fitness data into longevity insights.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: TITLE, template: "%s — FDAC" },
+  title: { default: TITLE, template: "%s | FDAC" },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
   authors: [{ name: "Brand Anthony McDonald", url: "https://brandanthonymcdonald.com" }],

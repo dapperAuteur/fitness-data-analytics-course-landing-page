@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { getDb } from "@/lib/db";
-import { lead, type Lead, type NewLead } from "@/db/schema";
+import { downloadLog, lead, type Lead, type NewDownloadLog, type NewLead } from "@/db/schema";
 
 export async function upsertLead(input: NewLead): Promise<Lead> {
   try {
@@ -40,6 +40,15 @@ export async function markSentToInbox(leadId: string): Promise<void> {
     await db.update(lead).set({ sentToInboxAt: new Date() }).where(eq(lead.id, leadId));
   } catch (err) {
     console.error("[db-safe] markSentToInbox failed", scrubError(err));
+  }
+}
+
+export async function logDownload(input: NewDownloadLog): Promise<void> {
+  try {
+    const db = getDb();
+    await db.insert(downloadLog).values(input);
+  } catch (err) {
+    console.error("[db-safe] logDownload failed", scrubError(err));
   }
 }
 

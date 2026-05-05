@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Activity, BookOpen, Clock, Heart, Star, Target, Users, Zap } from "lucide-react";
 
 export function Hero() {
@@ -20,8 +21,8 @@ export function Hero() {
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-cyan-50 sm:text-xl">
-              Learn to harness the power of personal metrics for better health decisions. Transform your
-              body&apos;s data into actionable insights for extraordinary longevity.
+              Learn to read the four health metrics that predict healthy aging. Use your wearable
+              data to make better day-to-day training and recovery decisions.
             </p>
             <ul className="mt-8 flex flex-wrap gap-3">
               {[
@@ -38,12 +39,19 @@ export function Hero() {
                 </li>
               ))}
             </ul>
-            <div className="mt-10">
-              <a
-                href="#join-waitlist"
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/ebook/foundations-3-page"
+                prefetch={false}
                 className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white px-6 py-3 text-base font-semibold text-cyan-700 shadow-sm transition hover:bg-cyan-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
-                Join the waitlist + grab the free guide
+                Download the free guide
+              </Link>
+              <a
+                href="#join-waitlist"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/15 px-6 py-3 text-base font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                Notify me when enrollment opens
               </a>
             </div>
           </div>

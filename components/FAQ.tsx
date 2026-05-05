@@ -1,7 +1,7 @@
 const faqs = [
   {
     q: "Who is this course for?",
-    a: "Coaches, trainers, and data-curious athletes who want to turn fitness-tracker data into actionable training decisions. No prior data-science background required — we start with the four foundational metrics and build from there.",
+    a: "Coaches, trainers, and data-curious athletes who want to use fitness-tracker data to make better training decisions. No data-science background required. We start with the four foundational metrics and build from there.",
   },
   {
     q: "What devices or apps do I need?",
@@ -9,19 +9,19 @@ const faqs = [
   },
   {
     q: "How long does the course run?",
-    a: "Five weeks, with one module released per week. Each module includes a guided exercise you complete with your own data — by the end you have a personal optimization protocol.",
+    a: "Five weeks, with one module released per week. Each module includes a guided exercise you complete with your own data. By the end you have a personal optimization protocol.",
   },
   {
     q: "Is this medical advice?",
     a: "No. The course is educational content for healthy adults learning to interpret their own metrics. It is not a substitute for advice from a qualified medical professional.",
   },
   {
-    q: "What happens after I join the waitlist?",
-    a: "You receive an immediate download link for the free 3-page foundations guide, plus an email when enrollment opens for the next cohort.",
+    q: "Do I need to give my email to read the free guide?",
+    a: "No. You can download the 3-page foundations guide directly from the homepage with no signup. The contact form is for people who want updates when course enrollment opens.",
   },
   {
-    q: "Can I get a refund if it isn't a fit?",
-    a: "Yes. The course ships with a 14-day money-back window — review the first two weeks of materials with your own data, and if it isn't worth your time, we issue a full refund.",
+    q: "What is the refund policy?",
+    a: "All course sales are final. Read the syllabus, browse the free 3-page guide, and ask any pre-purchase questions before you enroll.",
   },
 ];
 
