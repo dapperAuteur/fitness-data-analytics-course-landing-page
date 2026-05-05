@@ -3,7 +3,7 @@ const weeks = [
     week: 1,
     title: "Foundations of Fitness and Health Metrics",
     description: "Master the 4 essential health metrics and learn to read your body's dashboard.",
-    topics: ["Resting Heart Rate", "Daily Steps", "Sleep Quality", "Calories Burned"],
+    topics: ["Resting Heart Rate", "Daily Steps", "Sleep Quality", "Activity Minutes"],
     tone: "from-cyan-500 to-sky-600",
   },
   {
