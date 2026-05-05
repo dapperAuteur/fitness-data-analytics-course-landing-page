@@ -1,56 +1,72 @@
-import React from 'react'
-import { BarChart3, Users, Target } from 'lucide-react';
+import { BarChart3, Target, Users } from "lucide-react";
 
-function Specialization() {
+const courses = [
+  {
+    icon: BarChart3,
+    title: "Course 1: Foundations",
+    body: "Master health metrics and data-driven decision making.",
+    badge: "Current course",
+    tone: "border-cyan-200 bg-cyan-50",
+    iconTone: "from-cyan-500 to-sky-600",
+    badgeTone: "bg-cyan-100 text-cyan-800",
+  },
+  {
+    icon: Target,
+    title: "Course 2: Intervention Design",
+    body: "Turn data into action with scientific intervention protocols.",
+    bullets: ["8-week intensive program", "Personal experimentation framework", "From tracker to health designer"],
+    tone: "border-blue-200 bg-blue-50",
+    iconTone: "from-blue-500 to-indigo-600",
+  },
+  {
+    icon: Users,
+    title: "Course 3: Open Science",
+    body: "Collaborative data collection and protocol experiments.",
+    bullets: ["Citizen science methodology", "Community data insights", "Peer-reviewed protocols"],
+    tone: "border-teal-200 bg-teal-50",
+    iconTone: "from-teal-500 to-emerald-600",
+  },
+];
+
+export function Specialization() {
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Part of the Complete Specialization</h2>
-          <p className="text-xl text-gray-600">This foundational course connects to advanced programs for comprehensive health optimization</p>
+    <section aria-labelledby="specialization-heading" className="bg-white py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 id="specialization-heading" className="text-3xl font-bold sm:text-4xl">
+            Part of the complete specialization
+          </h2>
+          <p className="mt-4 text-lg text-slate-600">
+            This foundational course connects to advanced programs for comprehensive health
+            optimization.
+          </p>
         </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="bg-gradient-to-br from-purple-50 to-fuchsia-50 rounded-2xl p-8 border border-purple-200">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center mb-6">
-              <BarChart3 className="w-6 h-6 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Course 1: Foundations</h3>
-            <p className="text-gray-600 mb-4">Master health metrics and data-driven decision making</p>
-            <div className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm inline-block">
-              Current Course
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center mb-6">
-              <Target className="w-6 h-6 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Course 2: Intervention Design</h3>
-            <p className="text-gray-600 mb-4">Turn data into action with scientific intervention protocols</p>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• 8-week intensive program</li>
-              <li>• Personal experimentation framework</li>
-              <li>• From tracker to health designer</li>
-            </ul>
-          </div>
-
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-200">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mb-6">
-              <Users className="w-6 h-6 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Course 3: Open Science</h3>
-            <p className="text-gray-600 mb-4">Collaborative data collection and protocol experiments</p>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• Citizen science methodology</li>
-              <li>• Community data insights</li>
-              <li>• Peer-reviewed protocols</li>
-            </ul>
-          </div>
-        </div>
+        <ul className="mt-12 grid gap-8 lg:grid-cols-3">
+          {courses.map(({ icon: Icon, title, body, badge, bullets, tone, iconTone, badgeTone }) => (
+            <li key={title} className={`rounded-2xl border p-6 sm:p-8 ${tone}`}>
+              <div
+                className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${iconTone}`}
+              >
+                <Icon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+              <h3 className="mt-6 text-xl font-bold sm:text-2xl">{title}</h3>
+              <p className="mt-3 text-slate-700">{body}</p>
+              {badge && (
+                <p className={`mt-4 inline-block rounded-full px-3 py-1 text-sm ${badgeTone ?? ""}`}>
+                  {badge}
+                </p>
+              )}
+              {bullets && (
+                <ul className="mt-4 space-y-1 text-sm text-slate-600">
+                  {bullets.map((b) => (
+                    <li key={b}>• {b}</li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
-  )
+  );
 }
-
-export default Specialization

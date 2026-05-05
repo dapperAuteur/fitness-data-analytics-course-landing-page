@@ -1,59 +1,60 @@
-"use client"
+import { CourseOverview } from "@/components/CourseOverview";
+import { EbookOffer } from "@/components/EbookOffer";
+import { FAQ } from "@/components/FAQ";
+import { Footer } from "@/components/Footer";
+import { Hero } from "@/components/Hero";
+import { LeadForm } from "@/components/LeadForm";
+import { Specialization } from "@/components/Specialization";
+import { Testimonial } from "@/components/Testimonial";
+import { WeeklyBreakdown } from "@/components/WeeklyBreakdown";
 
-import React from 'react';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
-import Hero from '@/components/Hero';
-import Header from '@/components/Header';
-import CourseOverview from '@/components/CourseOverview';
-import WeeklyBreakdown from '@/components/WeeklyBreakdown';
-import Specialization from '@/components/Specialization';
-import Footer from '@/components/Footer';
-import WaitlistForm from '@/components/WaitlistForm';
-import ShareSection from '@/components/ShareSection';
+const courseJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: "Foundations of Fitness and Health Metrics",
+  description:
+    "A 5-week course teaching coaches, trainers, and data-curious athletes how to turn their fitness-tracker data into actionable training decisions.",
+  provider: {
+    "@type": "Organization",
+    name: "B4C LLC",
+    sameAs: "https://fdac.witus.online",
+  },
+  educationalLevel: "Adult",
+  inLanguage: "en",
+  url: "https://fdac.witus.online",
+  hasCourseInstance: {
+    "@type": "CourseInstance",
+    courseMode: "Online",
+    courseWorkload: "PT5H",
+  },
+  offers: {
+    "@type": "Offer",
+    category: "Course",
+    availability: "https://schema.org/PreOrder",
+  },
+} as const;
 
-const FitnessAnalyticsLanding = () => {
-
+export default function HomePage() {
   const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
-  if (!recaptchaSiteKey) {
-    // A simple error message if the key is missing
-    return (
-        <div className="flex items-center justify-center h-screen">
-            <p className="text-red-500 bg-red-100 p-4 rounded-lg">reCAPTCHA Site Key is not configured. Please check your environment variables.</p>
-        </div>
-    );
-  }
-
   return (
-    <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey}>
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
-        <section className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-fuchsia-600 to-pink-500 text-white">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <Header />
-            <Hero />
-          </div>
-        </div>
-      </section>
-      <CourseOverview />
-      <WeeklyBreakdown />
-      <Specialization /> 
-        <div className="relative z-10 container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
-            {/* Lead Magnet Form Section */}
-            <section id="join-waitlist">
-              <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-2xl">
-                <WaitlistForm pageSource="Fitness Analytics Landing Page" />
-              </div>
-            </section>
-            <ShareSection />
-          </div>
-        </div>
-        <Footer />
-      </div>
-    </GoogleReCaptchaProvider>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+      />
+      <main id="main" className="flex-1">
+        <Hero />
+        <CourseOverview />
+        <WeeklyBreakdown />
+        <Specialization />
+        <Testimonial />
+        <EbookOffer>
+          <LeadForm recaptchaSiteKey={recaptchaSiteKey} />
+        </EbookOffer>
+        <FAQ />
+      </main>
+      <Footer />
+    </>
   );
-};
-
-export default FitnessAnalyticsLanding;
+}
