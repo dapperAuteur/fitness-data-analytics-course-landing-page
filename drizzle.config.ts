@@ -1,5 +1,11 @@
 import { defineConfig } from "drizzle-kit";
-import "dotenv/config";
+import { config } from "dotenv";
+
+// Standalone tools (drizzle-kit, tsx scripts) don't get Next's automatic
+// .env.local loader, so load it explicitly. Order matches Next's precedence:
+// .env.local overrides .env, both are read.
+config({ path: ".env.local" });
+config({ path: ".env" });
 
 const url = process.env.STORAGE_DATABASE_URL_UNPOOLED ?? process.env.STORAGE_DATABASE_URL;
 
