@@ -26,7 +26,7 @@ export default async function ThanksPage({
             Download the foundations guide (PDF)
           </a>
         )}
-        <p className="mt-6 text-sm text-slate-500">
+        <p className="mt-6 text-sm text-slate-600">
           We&apos;ll also email you when enrollment opens for the next cohort. In the meantime, browse
           the rest of the ecosystem:{" "}
           <Link
