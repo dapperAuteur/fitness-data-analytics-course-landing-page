@@ -26,6 +26,7 @@ This version (Next 16) has breaking changes — APIs, conventions, and file stru
 - Next 16: use `proxy.ts`, not `middleware.ts`. FDAC has no auth-gated routes today, so no proxy.ts is needed yet.
 - `plans/` is gitignored. **Never commit `.env*`** except `.env.example`. `_archive/` is gitignored (rebuild rollback safety; safe to delete after the rebuild branch merges).
 - Every plan ships on its own branch. **Never push to `main`** — user reviews + pushes
+- **Small branches, one concern each.** A branch addresses one user ask, one bug, or one focused refactor. New ask = new branch. Resist bundling unrelated work even when "it's right there." Bundled branches make review harder, partial-merge impossible, and reverts surgical-instead-of-clean. If a single ask spans multiple files (e.g., a footer rewrite touches Footer.tsx + a constants file), that's still one concern; if two unrelated asks land in the same conversation turn, they get two branches.
 - **Cross-repo edits:** branch in the sibling, user-task in origin queue for merge/push
 
 **Local port convention:** FDAC dev runs on `localhost:3000`; witus-inbox dev runs on `localhost:3001`. Local `INBOX_INGEST_URL = http://localhost:3001/api/ingest`.
