@@ -13,7 +13,7 @@ export function Testimonial() {
         </p>
         <figure className="mt-10 rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-left">
           <blockquote className="text-lg text-slate-700">
-            <em>Testimonial slot — content lands here in week 2 of the launch window.</em>
+            <em>Testimonial slot. Content lands here in week 2 of the launch window.</em>
           </blockquote>
           <figcaption className="mt-4 text-sm text-slate-600">
             Real quote + role + photo replace this placeholder before public promotion.

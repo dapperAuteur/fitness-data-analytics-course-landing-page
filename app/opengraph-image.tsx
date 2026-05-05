@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Foundations of Fitness and Health Metrics — a 5-week course for data-curious coaches, trainers, and athletes.";
+  "Foundations of Fitness and Health Metrics. A 5-week course for data-curious coaches, trainers, and athletes.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
