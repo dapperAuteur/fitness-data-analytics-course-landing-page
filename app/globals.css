@@ -1,26 +1,19 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* FDAC ships as a single light theme. Headings, paragraphs, and section
+   surfaces are all explicitly colored via Tailwind utilities (text-slate-900
+   on body in app/layout.tsx, text-slate-600/700 on body copy, text-white
+   only on saturated cyan/sky gradient backgrounds). The create-next-app
+   default included a `prefers-color-scheme: dark` block that flipped body
+   color to near-white; on this site that produced near-white headings on
+   the forced bg-white sections (CourseOverview h2 + h3, etc) for users
+   whose OS preference is dark. Removed. If FDAC ever adds a real dark
+   theme, every section's bg-* + text-* utilities have to be revisited
+   together — flipping the body color alone won't be sufficient.
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+   The body { ... } rule is dropped too because layout.tsx handles bg and
+   text via Tailwind. Keeping only the font-family fallback. */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
