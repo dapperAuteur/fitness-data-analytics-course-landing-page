@@ -19,7 +19,7 @@ export function EbookOffer({ children }: { children: ReactNode }) {
               Get the foundations in your inbox
             </h2>
             <p className="mt-4 text-lg text-cyan-50">
-              Join the waitlist for the next cohort. We&apos;ll email you when enrollment opens — and
+              Join the waitlist for the next cohort. We&apos;ll email you when enrollment opens, and
               send the free 3-page guide to the four metrics that matter most for healthy aging.
             </p>
             <ul className="mt-6 space-y-2 text-sm text-cyan-50">

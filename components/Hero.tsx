@@ -20,8 +20,8 @@ export function Hero() {
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-cyan-50 sm:text-xl">
-              Learn to harness the power of personal metrics for better health decisions. Transform your
-              body&apos;s data into actionable insights for extraordinary longevity.
+              Learn to read the four health metrics that predict healthy aging. Use your wearable
+              data to make better day-to-day training and recovery decisions.
             </p>
             <ul className="mt-8 flex flex-wrap gap-3">
               {[

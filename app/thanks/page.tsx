@@ -15,7 +15,7 @@ export default async function ThanksPage({
         <p className="text-sm font-semibold uppercase tracking-wide text-cyan-700">You&apos;re on the list</p>
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Thanks{email ? `, ${email}` : ""}.</h1>
         <p className="mt-4 text-lg text-slate-600">
-          Your free 3-page guide is ready below. The link expires in 24 hours — download it now and
+          Your free 3-page guide is ready below. The link expires in 24 hours. Download it now and
           save the PDF locally so you can refer back to it anytime.
         </p>
         {downloadUrl && (

@@ -31,7 +31,7 @@ export async function GET(
   try {
     pdf = await readFile(join(EBOOK_ROOT, `${slug}.pdf`));
   } catch {
-    return new Response("Ebook not generated yet — run `npm run build:ebook`.", { status: 404 });
+    return new Response("Ebook not generated yet. Run `npm run build:ebook`.", { status: 404 });
   }
 
   // Best-effort logging of delivery; never blocks response.
@@ -51,7 +51,7 @@ export async function GET(
 
 function expiredResponse(): Response {
   return new Response(
-    "Link expired — request a fresh download from your email or by re-submitting the waitlist form.",
+    "Link expired. Request a fresh download from your email or by re-submitting the waitlist form.",
     { status: 401, headers: { "Content-Type": "text/plain; charset=utf-8" } },
   );
 }

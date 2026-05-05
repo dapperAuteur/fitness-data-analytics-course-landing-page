@@ -3,18 +3,18 @@ import { BarChart3, Target, TrendingUp } from "lucide-react";
 const benefits = [
   {
     icon: BarChart3,
-    title: "Track Like a Scientist",
-    body: "Learn the 4 essential metrics that predict longevity: heart rate variability, intensity minutes, sleep quality, and daily movement patterns.",
+    title: "Track the four numbers",
+    body: "Learn the four foundational metrics that predict healthy aging: resting heart rate, daily steps, sleep quality, and weekly activity minutes.",
   },
   {
     icon: Target,
-    title: "Optimize with Precision",
-    body: "Use device-guided feedback to achieve 150 moderate + 75 vigorous intensity minutes weekly — the research-proven formula for 50% mortality reduction.",
+    title: "Hit the right dose",
+    body: "Use device-guided feedback to land 150 moderate plus 75 vigorous activity minutes per week. That dose is linked to roughly 50% lower all-cause mortality in cohort studies.",
   },
   {
     icon: TrendingUp,
-    title: "Build for Longevity",
-    body: "Create sustainable habits that compound over decades, following patterns observed in centenarian populations worldwide.",
+    title: "Build habits that hold",
+    body: "Make changes that compound over decades, drawing on patterns seen in centenarian populations.",
   },
 ];
 
@@ -24,12 +24,12 @@ export function CourseOverview() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <h2 id="overview-heading" className="text-3xl font-bold sm:text-4xl">
-            Turn your health data into your longevity advantage
+            Read your data, train smarter
           </h2>
           <p className="mt-4 text-lg text-slate-600">
-            Most people never learn to read their body&apos;s dashboard. By the end of this course, you&apos;ll
-            know exactly how to interpret your health signals and use that information to make smart
-            decisions every single day.
+            Most people never learn what their wearable is actually telling them. By the end of this
+            course you can read the four foundational metrics, spot weekly trends, and use both to
+            decide what to do tomorrow.
           </p>
         </div>
         <ul className="mt-12 grid gap-8 md:grid-cols-3">
