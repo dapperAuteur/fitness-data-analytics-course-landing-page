@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { LeadForm } from "@/components/LeadForm";
 import { Specialization } from "@/components/Specialization";
-import { Testimonial } from "@/components/Testimonial";
+// import { Testimonial } from "@/components/Testimonial";
 import { VerifiedResearch } from "@/components/VerifiedResearch";
 import { WeeklyBreakdown } from "@/components/WeeklyBreakdown";
 
@@ -50,7 +50,7 @@ export default function HomePage() {
         <WeeklyBreakdown />
         <VerifiedResearch />
         <Specialization />
-        <Testimonial />
+        {/* <Testimonial /> */}
         <EbookOffer>
           <LeadForm recaptchaSiteKey={recaptchaSiteKey} />
         </EbookOffer>
