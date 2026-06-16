@@ -15,20 +15,21 @@ export function Hero() {
               Part of the World&apos;s Fastest Centenarian Specialization
             </p>
             <h1 id="hero-heading" className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
-              Foundations of Fitness and{" "}
+              Read Your{" "}
               <span className="bg-gradient-to-r from-cyan-200 to-teal-200 bg-clip-text text-transparent">
-                Health Metrics
+                Body&apos;s Data
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-cyan-50 sm:text-xl">
-              Learn to read the four health metrics that predict healthy aging. Use your wearable
-              data to make better day-to-day training and recovery decisions.
+              Your watch already collects the four numbers that matter most for living longer.
+              This 5-week, audio-first course teaches you to read them, run one simple experiment
+              on yourself, and build a 90-day plan from your own data.
             </p>
             <ul className="mt-8 flex flex-wrap gap-3">
               {[
-                { icon: Clock, label: "5-Week Course" },
-                { icon: Users, label: "Collaborative Learning" },
-                { icon: BookOpen, label: "Open Science Approach" },
+                { icon: Clock, label: "5-Week Audio Course" },
+                { icon: BookOpen, label: "Backed by Verified Research" },
+                { icon: Users, label: "Free Downloads, No Email" },
               ].map(({ icon: Icon, label }) => (
                 <li
                   key={label}

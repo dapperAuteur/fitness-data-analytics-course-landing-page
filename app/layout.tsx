@@ -14,14 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_URL = "https://fdac.witus.online";
-const SITE_NAME = "FDAC";
-const TITLE = "Foundations of Fitness and Health Metrics | FDAC";
+const SITE_NAME = "Read Your Body's Data";
+const TITLE = "Read Your Body's Data: Live Longer With Your Fitness Tracker";
 const DESCRIPTION =
-  "Learn to harness the power of personal metrics for better health decisions. A 5-week course for coaches, trainers, and data-curious athletes who want to turn fitness data into longevity insights.";
+  "A 5-week, audio-first course that teaches you to read the four numbers your fitness tracker already collects, and use them with longevity science to add healthy years. Every claim is backed by peer-reviewed research you can check yourself.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: TITLE, template: "%s | FDAC" },
+  title: { default: TITLE, template: "%s | Read Your Body's Data" },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
   authors: [{ name: "Brand Anthony McDonald", url: "https://brandanthonymcdonald.com" }],
