@@ -9,12 +9,12 @@ const benefits = [
   {
     icon: Target,
     title: "Hit the right dose",
-    body: "Use device-guided feedback to land 150 moderate plus 75 vigorous activity minutes per week. That dose is linked to roughly 50% lower all-cause mortality in cohort studies.",
+    body: "Use device-guided feedback to land about 150 to 300 moderate or 75 to 150 vigorous activity minutes a week, the level large international studies link to substantially lower mortality.",
   },
   {
     icon: TrendingUp,
     title: "Build habits that hold",
-    body: "Make changes that compound over decades, drawing on patterns seen in centenarian populations.",
+    body: "Make small, data-guided changes that compound over months and years, using systems instead of short-lived goals.",
   },
 ];
 

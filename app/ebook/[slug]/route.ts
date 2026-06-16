@@ -7,7 +7,14 @@ import { logDownload } from "@/lib/db-safe";
 
 const EBOOK_ROOT = join(process.cwd(), "app", "ebooks");
 
-const ALLOWED_SLUGS = new Set(["foundations-3-page"]);
+// Each slug is a separate marketing material. Every download is logged to download_log
+// by slug, so we can see which material works (and, with UTM passthrough to the academy,
+// which one leads to enrollment).
+const ALLOWED_SLUGS = new Set([
+  "foundations-3-page",
+  "foundations-preview-ebook",
+  "baseline-assessment-kit",
+]);
 
 export async function GET(
   _req: NextRequest,
