@@ -10,6 +10,8 @@
     "build": "tsx scripts/validate-env.ts && next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "validate-env": "tsx scripts/validate-env.ts"
@@ -17,6 +19,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.1.0",
+    "@sentry/nextjs": "^10.69.0",
     "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -43,7 +46,8 @@
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   },
   "overrides": {
     "postcss": "^8.5.10"

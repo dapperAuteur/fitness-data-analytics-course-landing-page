@@ -14,6 +14,15 @@ const EnvSchema = z.object({
   EBOOK_JWT_SECRET: z.string().min(32),
   EBOOK_BASE_URL: z.string().url().optional(),
 
+  // Error monitoring (Better Stack, ingested through the Sentry SDK). Declared here for
+  // documentation and type safety only: the instrumentation files read process.env directly, because
+  // they load during Next's instrumentation phase before this lazy validator ever runs and the same
+  // code has to work on the edge runtime. All optional, so the app is fully functional with none set.
+  SENTRY_DSN: z.string().min(1).optional(),
+  NEXT_PUBLIC_SENTRY_DSN: z.string().min(1).optional(),
+  SENTRY_ENVIRONMENT: z.string().min(1).optional(),
+  NEXT_PUBLIC_SENTRY_ENVIRONMENT: z.string().min(1).optional(),
+
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
   VERCEL_URL: z.string().optional(),
