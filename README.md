@@ -31,7 +31,7 @@ elsewhere. Operated by B4C LLC. Built by
 | Database | Neon Postgres via Drizzle ORM |
 | Bot gate | Google reCAPTCHA v3 (server-verify, score ≥ 0.5) |
 | Inter-app messaging | HMAC-SHA256 signed webhook to inbox.witus.online |
-| Ebook delivery | `@react-pdf/renderer` build-time PDF + signed HS256 JWT (24h expiry) |
+| Ebook delivery | `@react-pdf/renderer` build-time PDF, served publicly and logged per download |
 | Error monitoring | Better Stack, ingested via `@sentry/nextjs` (opt-in: inert without a DSN) |
 | Tests | Vitest (`npm test`) |
 | Hosting | Vercel (with Vercel Analytics) |
@@ -41,8 +41,8 @@ elsewhere. Operated by B4C LLC. Built by
 | Route | Description |
 |---|---|
 | `/` | Landing page — Hero, course overview, 5-week curriculum, specialization, testimonial slot, lead form, FAQ |
-| `/thanks` | Post-submit success — shows the signed ebook download URL (24h expiry) |
-| `/ebook/[slug]` | Verifies signed JWT, streams the PDF; never indexed |
+| `/thanks` | Post-submit success — links to the free guide (no token, same public URL as the landing page) |
+| `/ebook/[slug]` | **Public, unauthenticated.** Logs the download to `download_log`, then streams the local PDF or redirects to the Cloudinary-hosted one. `noindex`, but not access-controlled |
 | `/api/_*` *(reserved)* | Future server endpoints; currently none — all server work lives in App Router server actions |
 
 ## Quick start
@@ -106,7 +106,7 @@ app/
   global-error.tsx                   root error boundary; reports the crash, offers retry
   actions.ts                         "use server" lead-submit action
   thanks/page.tsx                    post-submit page (reads ?email + ?download)
-  ebook/[slug]/route.ts              JWT verify + PDF stream
+  ebook/[slug]/route.ts              public download: log to download_log + PDF stream/redirect
   ebooks/                            generated PDFs (gitignored; built by scripts/build-ebook.tsx)
   opengraph-image.tsx, twitter-image.tsx  dynamic 1200x630 OG via next/og
   sitemap.ts, robots.ts              metadata routes (preview = robots-disallow)
@@ -119,7 +119,10 @@ lib/
   db-safe.ts                         PII-safe upsertLead + delivery markers
   recaptcha.ts                       Google siteverify wrapper (dev-log fallback)
   inbox.ts                           HMAC-signed POST to witus-inbox (after()-friendly)
-  ebook.ts                           jose-based signEbookToken/verifyEbookToken/buildEbookUrl
+  ebook.ts                           jose-based sign/verify/buildEbookUrl — CURRENTLY UNUSED.
+                                      Dead code from the pre-2026-06-16 gated design; the
+                                      downloads are deliberately free and ungated now. Keep or
+                                      delete, but do not assume it protects anything.
   ebook-doc.tsx                      @react-pdf/renderer document for the 3-page guide
   sentry-scrub.ts                    beforeSend scrubber (PII, tokens, bodies, headers)
 db/schema.ts                         Drizzle `lead` table

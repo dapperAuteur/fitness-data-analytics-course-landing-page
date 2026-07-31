@@ -19,7 +19,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: ["/", "/thanks"],
-        // Signed ebook URLs are private to each lead; keep them out of the index.
+        // The ebook URLs are public and unauthenticated by design (free, no-email lead
+        // magnets). They are kept out of the index so the PDFs do not outrank the landing
+        // page, not because they are access-controlled. Do not read this as a security gate.
         disallow: ["/ebook/"],
       },
     ],
