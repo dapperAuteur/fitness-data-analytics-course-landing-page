@@ -32,6 +32,8 @@ elsewhere. Operated by B4C LLC. Built by
 | Bot gate | Google reCAPTCHA v3 (server-verify, score ≥ 0.5) |
 | Inter-app messaging | HMAC-SHA256 signed webhook to inbox.witus.online |
 | Ebook delivery | `@react-pdf/renderer` build-time PDF + signed HS256 JWT (24h expiry) |
+| Error monitoring | Better Stack, ingested via `@sentry/nextjs` (opt-in: inert without a DSN) |
+| Tests | Vitest (`npm test`) |
 | Hosting | Vercel (with Vercel Analytics) |
 
 ## Routes
@@ -59,13 +61,49 @@ drop `SKIP_ENV_VALIDATION=true` so the build's eager `validate-env` runs.
 ```bash
 npm run db:push          # apply Drizzle schema to Neon
 npm run db:studio        # open the Drizzle UI
+npm test                 # Vitest unit tests (lib/ helpers, incl. the Sentry scrubber)
 ```
+
+## Error monitoring
+
+Crash reporting goes to **Better Stack**, which ingests through the Sentry SDK, so the
+wiring is the standard `@sentry/nextjs` set: `instrumentation.ts` (server + edge
+`register()` and `onRequestError`), `instrumentation-client.ts` (browser init and
+`onRouterTransitionStart`), `sentry.server.config.ts`, `sentry.edge.config.ts`, and
+`app/global-error.tsx` for crashes in the root layout itself.
+
+**It is opt-in and inert by default.** Every `Sentry.init` is wrapped in a DSN guard, so
+with no `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` set nothing initialises, nothing is sent,
+and the build behaves exactly as it did before. Tracing and session replay are pinned to
+`0`: errors only, no performance spend, and no recording of a visitor typing their email
+into the lead form. Set the vars per [`.env.example`](./.env.example) to switch it on.
+
+Everything is filtered through `lib/sentry-scrub.ts` (`beforeSend`) before leaving the
+process. It removes emails and JWTs from message text, redacts values whose key name is a
+credential (matched per name segment, so `access_token` is caught and `state` is not),
+redacts the `/ebook?t=` download token by path context, drops cookies, auth headers, and
+IP headers, and **strips request bodies whole** rather than filtering fields inside them,
+because this is a health-adjacent funnel and a field allowlist fails open the day someone
+adds a body-metric field to the lead form. The file header explains each decision, and
+[`tests/sentry-scrub.test.ts`](./tests/sentry-scrub.test.ts) asserts both that secrets are
+gone and that ordinary data is not over-redacted.
+
+There is **no Content-Security-Policy** in this repo today (no `headers()` in
+`next.config.ts`, no `vercel.json`, no proxy), so nothing needed a `connect-src`
+allowance. If a CSP is added later, append the DSN origin to `connect-src` only when a DSN
+is actually configured.
 
 ## Project structure
 
 ```
+instrumentation.ts                   Next instrumentation hook: loads the per-runtime
+                                      error-monitoring config + onRequestError
+instrumentation-client.ts            browser error-monitoring init + onRouterTransitionStart
+sentry.server.config.ts              Node-runtime init (DSN-guarded, errors only)
+sentry.edge.config.ts                edge-runtime init (DSN-guarded, errors only)
 app/
   layout.tsx, page.tsx               root layout + landing page (Server Components)
+  global-error.tsx                   root error boundary; reports the crash, offers retry
   actions.ts                         "use server" lead-submit action
   thanks/page.tsx                    post-submit page (reads ?email + ?download)
   ebook/[slug]/route.ts              JWT verify + PDF stream
@@ -83,7 +121,9 @@ lib/
   inbox.ts                           HMAC-signed POST to witus-inbox (after()-friendly)
   ebook.ts                           jose-based signEbookToken/verifyEbookToken/buildEbookUrl
   ebook-doc.tsx                      @react-pdf/renderer document for the 3-page guide
+  sentry-scrub.ts                    beforeSend scrubber (PII, tokens, bodies, headers)
 db/schema.ts                         Drizzle `lead` table
+tests/sentry-scrub.test.ts           Vitest coverage for the scrubber (both directions)
 scripts/
   validate-env.ts                    eager build-time check (Zod)
   build-ebook.tsx                    renders the PDF to app/ebooks/foundations-3-page.pdf
