@@ -43,7 +43,7 @@ elsewhere. Operated by B4C LLC. Built by
 | `/` | Landing page — Hero, course overview, 5-week curriculum, specialization, testimonial slot, lead form, FAQ |
 | `/thanks` | Post-submit success — shows the signed ebook download URL (24h expiry) |
 | `/ebook/[slug]` | Verifies signed JWT, streams the PDF; never indexed |
-| `/api/_*` *(reserved)* | Future server endpoints; currently none — all server work lives in App Router server actions |
+| `/api/health` | Uptime probe: `select 1` against Postgres. `GET` and `HEAD`, public, never cached |
 
 ## Quick start
 
@@ -63,6 +63,37 @@ npm run db:push          # apply Drizzle schema to Neon
 npm run db:studio        # open the Drizzle UI
 npm test                 # Vitest unit tests (lib/ helpers, incl. the Sentry scrubber)
 ```
+
+## Health check
+
+`GET /api/health` (and `HEAD /api/health`) is the endpoint uptime monitors should watch.
+**Point Better Stack at `/api/health`, not at `/`.** The homepage can serve a cached 200
+from the CDN while the database behind the lead form is down, so a green check on `/`
+proves only that the CDN is up.
+
+| State | Status | Body |
+|---|---|---|
+| Database reachable | `200` | `{"ok":true,"checks":{"db":"ok"}}` |
+| Database unreachable, or the probe exceeds 4s | `503` | `{"ok":false,"error":"database_unreachable"}` |
+
+`HEAD` returns the same status code with no body.
+
+What it does and, more importantly, what it does not:
+
+- It runs exactly one query, `select 1`. It never reads, returns, or counts a `lead` or
+  `download_log` row, and it reports no number of any kind. Nothing in the response implies
+  how many leads exist. This is a health-adjacent funnel on a public unauthenticated route,
+  so even a row count is more than a monitor needs.
+- It calls **no third-party API** — no email provider, no reCAPTCHA, no Cloudinary. A
+  vendor outage must not redden the monitor, because none of those take the funnel down
+  the way Postgres does.
+- It **never echoes the underlying error**. A Neon failure carries the connection string
+  (password included) in its message, so the `catch` takes no binding, the response body is
+  a fixed literal, and the server log line is a constant string.
+- It is never cached: `force-dynamic`, `revalidate = 0`, and `Cache-Control: no-store` on
+  every response.
+- The probe is capped at **4 seconds** via `Promise.race`, so a hung connection fails the
+  check instead of hanging the monitor until its own timeout.
 
 ## Error monitoring
 
@@ -107,6 +138,7 @@ app/
   actions.ts                         "use server" lead-submit action
   thanks/page.tsx                    post-submit page (reads ?email + ?download)
   ebook/[slug]/route.ts              JWT verify + PDF stream
+  api/health/route.ts                uptime probe: select 1, no PII, no vendor calls
   ebooks/                            generated PDFs (gitignored; built by scripts/build-ebook.tsx)
   opengraph-image.tsx, twitter-image.tsx  dynamic 1200x630 OG via next/og
   sitemap.ts, robots.ts              metadata routes (preview = robots-disallow)
