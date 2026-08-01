@@ -74,7 +74,8 @@ proves only that the CDN is up.
 | State | Status | Body |
 |---|---|---|
 | Database reachable | `200` | `{"ok":true,"checks":{"db":"ok"}}` |
-| Database unreachable, or the probe exceeds 4s | `503` | `{"ok":false,"error":"database_unreachable"}` |
+| Database unreachable | `503` | `{"ok":false,"error":"database_unreachable"}` |
+| Probe exceeds 4s | `503` | `{"ok":false,"error":"database_timeout"}` |
 
 `HEAD` returns the same status code with no body.
 
@@ -88,8 +89,9 @@ What it does and, more importantly, what it does not:
   vendor outage must not redden the monitor, because none of those take the funnel down
   the way Postgres does.
 - It **never echoes the underlying error**. A Neon failure carries the connection string
-  (password included) in its message, so the `catch` takes no binding, the response body is
-  a fixed literal, and the server log line is a constant string.
+  (password included) in its `message`, so the response body is built only from a closed
+  union of allowed values (`database_unreachable` / `database_timeout`) and the server log
+  line carries only the error's **class name** (e.g. `NeonDbError`), never its message.
 - It is never cached: `force-dynamic`, `revalidate = 0`, and `Cache-Control: no-store` on
   every response.
 - The probe is capped at **4 seconds** via `Promise.race`, so a hung connection fails the

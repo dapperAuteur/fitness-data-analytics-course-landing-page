@@ -14,8 +14,9 @@ import { getDb } from "@/lib/db";
 //   personal data (email, name, experience level, IP, user agent), and an unauthenticated
 //   public endpoint is the wrong place to leak even the shape of it.
 // - It never echoes the underlying error. A Neon failure carries the connection string,
-//   password included, in its message, so the catch below takes no binding at all and the
-//   response body is a fixed literal.
+//   password included, in its `message`, so the response body is built only from the closed
+//   `ProbeResult` union below and the server log line carries only the error's CLASS NAME.
+//   `err.message` must never be logged or returned here.
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
@@ -28,32 +29,49 @@ const NO_STORE_HEADERS = {
   "X-Robots-Tag": "noindex, nofollow",
 } as const;
 
+/** Raised only by our own timeout race, so a slow database reads differently from a dead one. */
+class ProbeTimeoutError extends Error {
+  constructor() {
+    super("probe timeout");
+    this.name = "ProbeTimeoutError";
+  }
+}
+
+/**
+ * The complete set of values that may ever reach the response body. Anything the database
+ * throws is collapsed into one of these, which is what keeps a connection string from
+ * escaping: there is no code path that copies error text into the payload.
+ */
+type ProbeResult = "ok" | "database_timeout" | "database_unreachable";
+
 /**
  * `select 1` against Postgres, capped at TIMEOUT_MS so a hung connection fails the check
  * instead of hanging the monitor until its own timeout.
  */
-async function probeDatabase(): Promise<boolean> {
+async function probeDatabase(): Promise<ProbeResult> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     const timeout = new Promise<never>((_resolve, reject) => {
-      timer = setTimeout(() => reject(new Error("timeout")), TIMEOUT_MS);
+      timer = setTimeout(() => reject(new ProbeTimeoutError()), TIMEOUT_MS);
     });
     await Promise.race([getDb().execute(sql`select 1`), timeout]);
-    return true;
-  } catch {
-    // Deliberately unbound: the error object can contain the connection string.
-    // Constant string only, never the message.
-    console.error("[health] database probe failed");
-    return false;
+    return "ok";
+  } catch (err) {
+    // Class name ONLY (e.g. "NeonDbError", "ProbeTimeoutError"). Never `err.message` — that
+    // is the field a Neon connection failure fills with postgres://user:pass@host.
+    const errorClass =
+      err instanceof Error ? err.constructor?.name || err.name : typeof err;
+    console.error(`[health] database probe failed (${errorClass})`);
+    return err instanceof ProbeTimeoutError ? "database_timeout" : "database_unreachable";
   } finally {
     clearTimeout(timer);
   }
 }
 
 export async function GET(): Promise<Response> {
-  const ok = await probeDatabase();
-  if (!ok) {
-    return new Response(JSON.stringify({ ok: false, error: "database_unreachable" }), {
+  const result = await probeDatabase();
+  if (result !== "ok") {
+    return new Response(JSON.stringify({ ok: false, error: result }), {
       status: 503,
       headers: NO_STORE_HEADERS,
     });
@@ -66,6 +84,6 @@ export async function GET(): Promise<Response> {
 
 // Monitors that use HEAD get the same status code with no body.
 export async function HEAD(): Promise<Response> {
-  const ok = await probeDatabase();
-  return new Response(null, { status: ok ? 200 : 503, headers: NO_STORE_HEADERS });
+  const result = await probeDatabase();
+  return new Response(null, { status: result === "ok" ? 200 : 503, headers: NO_STORE_HEADERS });
 }
