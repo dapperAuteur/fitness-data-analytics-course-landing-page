@@ -17,10 +17,24 @@ const LeadSchema = z.object({
 
 export type SubmitLeadInput = z.input<typeof LeadSchema>;
 
-export async function submitLead(input: SubmitLeadInput): Promise<{ ok: false; error: string }> {
+/**
+ * Coarse, machine-readable failure classes for analytics.
+ *
+ * The client captures this code, never `error`. The storage branch below puts
+ * `err.message` in `error`, and a Neon failure fills that field with
+ * postgres://user:pass@host — the exact leak lib/sentry-scrub.ts exists to prevent.
+ * Sending the message to a third-party analytics vendor would reopen it. Keeping the
+ * reason as a closed union also means the funnel does not break the day a piece of
+ * user-facing copy is reworded.
+ */
+export type SubmitLeadFailure = "validation" | "recaptcha" | "storage";
+
+export async function submitLead(
+  input: SubmitLeadInput,
+): Promise<{ ok: false; error: string; reason: SubmitLeadFailure }> {
   const parsed = LeadSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, error: "Please check the form and try again." };
+    return { ok: false, error: "Please check the form and try again.", reason: "validation" };
   }
 
   const headerList = await headers();
@@ -30,7 +44,11 @@ export async function submitLead(input: SubmitLeadInput): Promise<{ ok: false; e
 
   const passed = await verifyRecaptcha(parsed.data.token, "waitlist_submit", ip);
   if (!passed) {
-    return { ok: false, error: "We couldn't verify that you're human. Please reload and try again." };
+    return {
+      ok: false,
+      error: "We couldn't verify that you're human. Please reload and try again.",
+      reason: "recaptcha",
+    };
   }
 
   let lead;
@@ -46,6 +64,7 @@ export async function submitLead(input: SubmitLeadInput): Promise<{ ok: false; e
     return {
       ok: false,
       error: err instanceof Error ? err.message : "Could not save your submission.",
+      reason: "storage",
     };
   }
 

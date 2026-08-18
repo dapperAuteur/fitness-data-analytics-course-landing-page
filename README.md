@@ -33,6 +33,7 @@ elsewhere. Operated by B4C LLC. Built by
 | Inter-app messaging | HMAC-SHA256 signed webhook to inbox.witus.online |
 | Ebook delivery | `@react-pdf/renderer` build-time PDF + signed HS256 JWT (24h expiry) |
 | Error monitoring | Better Stack, ingested via `@sentry/nextjs` (opt-in: inert without a DSN) |
+| Product analytics | PostHog via `posthog-js`, anonymous and proxied through `/ingest` (opt-in: inert without a key) |
 | Tests | Vitest (`npm test`) |
 | Hosting | Vercel (with Vercel Analytics) |
 
@@ -124,7 +125,42 @@ gone and that ordinary data is not over-redacted.
 There is **no Content-Security-Policy** in this repo today (no `headers()` in
 `next.config.ts`, no `vercel.json`, no proxy), so nothing needed a `connect-src`
 allowance. If a CSP is added later, append the DSN origin to `connect-src` only when a DSN
-is actually configured.
+is actually configured. The same applies to the `/ingest` analytics proxy below, which is
+same-origin and therefore needs no allowance today.
+
+## Product analytics
+
+Behavioural analytics goes to the **shared ecosystem PostHog project** (US region), where
+every event carries `app: "fdac-course-lp"` so this landing page's data stays separable
+from the rest of the ecosystem. The wiring is a byte-for-byte copy of the ecosystem
+standard: `lib/analytics/posthog-provider.tsx` and `lib/analytics/capture.ts` are copied
+unchanged from the witus repo and audited by its
+`scripts/check-posthog-conformance.mjs`; only `lib/analytics/events.ts` is per-app.
+
+**It is opt-in and inert by default.** Without `NEXT_PUBLIC_POSTHOG_KEY` the provider
+never calls `posthog.init`, `capture()` no-ops, and the page renders exactly as before.
+Set both vars per [`.env.example`](./.env.example) to switch it on, and remember that
+`NEXT_PUBLIC_*` is inlined at build time — adding the var does nothing until a redeploy.
+
+**Capture is anonymous, which is why there is no consent banner.** `persistence` is
+`"memory"`, so there is no cookie and no `localStorage`; `autocapture` is off, so the lead
+form is not keystroke-logged; session replay is off. The trade is real and worth stating:
+every hard navigation looks like a new visitor, so treat unique counts as sessions and
+never quote a unique-visitor number. Ratios between events — what share of started
+waitlist submissions finish — are unaffected, and that is the number this page exists to
+move.
+
+Ingest is reverse-proxied through `/ingest` (see the rewrites in `next.config.ts`) so
+uBlock, Brave, and Safari cannot drop events at the vendor hostname. That proxy is why
+`skipTrailingSlashRedirect` is on, which disables trailing-slash redirects for **every**
+route; the root layout's `alternates.canonical` is what keeps search engines on one URL,
+so do not drop it in a metadata refactor.
+
+The taxonomy lives in `lib/analytics/events.ts`: `route_viewed` plus the waitlist funnel
+(`waitlist_started` / `waitlist_succeeded` / `waitlist_failed`). The failure event carries
+a coarse `reason` code from the server action, never the error text — a storage failure's
+message can contain the Neon connection string, which is the leak `lib/sentry-scrub.ts`
+exists to close.
 
 ## Project structure
 
@@ -156,6 +192,10 @@ lib/
   ebook.ts                           jose-based signEbookToken/verifyEbookToken/buildEbookUrl
   ebook-doc.tsx                      @react-pdf/renderer document for the 3-page guide
   sentry-scrub.ts                    beforeSend scrubber (PII, tokens, bodies, headers)
+  analytics/
+    posthog-provider.tsx             ecosystem copy — DO NOT EDIT (conformance-audited)
+    capture.ts                       ecosystem copy — DO NOT EDIT (conformance-audited)
+    events.ts                        per-app taxonomy + the app slug
 db/schema.ts                         Drizzle `lead` table
 tests/sentry-scrub.test.ts           Vitest coverage for the scrubber (both directions)
 scripts/

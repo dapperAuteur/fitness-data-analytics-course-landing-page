@@ -23,6 +23,15 @@ const EnvSchema = z.object({
   SENTRY_ENVIRONMENT: z.string().min(1).optional(),
   NEXT_PUBLIC_SENTRY_ENVIRONMENT: z.string().min(1).optional(),
 
+  // Product analytics (shared ecosystem PostHog project). Declared here for
+  // documentation and type safety only: app/layout.tsx reads NEXT_PUBLIC_POSTHOG_KEY
+  // from process.env directly, because NEXT_PUBLIC_* is inlined at build time and the
+  // provider has to work before this lazy validator ever runs. Both are optional and
+  // both are publishable — the phc_ key ships in the browser bundle by design.
+  // With neither set the provider never initialises and capture is simply off.
+  NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1).optional(),
+  NEXT_PUBLIC_POSTHOG_HOST: z.string().url().optional(),
+
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
   VERCEL_URL: z.string().optional(),
