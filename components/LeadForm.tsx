@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { z } from "zod";
 import { submitLead } from "@/app/actions";
+import { capture } from "@/lib/analytics/capture";
+import { EVENTS } from "@/lib/analytics/events";
 
 const LeadFormSchema = z.object({
   email: z.string().email("Enter a valid email."),
@@ -31,12 +33,25 @@ function InnerLeadForm() {
 
   const onSubmit = (values: LeadFormValues) => {
     setServerError(null);
+    // Fired after client-side validation passes, so `started -> succeeded` is a real
+    // completion rate rather than a measure of how often people mistype an email.
+    // Only the experience level goes with it: name and email are the whole reason this
+    // app captures anonymously, and neither belongs in a third-party analytics vendor.
+    capture(EVENTS.waitlistStarted, { experienceLevel: values.experienceLevel });
     startTransition(async () => {
       const token = executeRecaptcha ? await executeRecaptcha("waitlist_submit") : "";
       const result = await submitLead({ ...values, token });
       if (result && !result.ok) {
+        // `reason` is a closed union from the action, never `result.error` — a storage
+        // failure's message can carry the Neon connection string.
+        capture(EVENTS.waitlistFailed, { reason: result.reason });
         setServerError(result.error);
+        return;
       }
+      // The action redirects to /thanks on success, which resolves this call with no
+      // value. That client-side navigation is why the event still lands: it keeps the
+      // same document, and `persistence: "memory"` survives a soft navigation.
+      capture(EVENTS.waitlistSucceeded, { experienceLevel: values.experienceLevel });
     });
   };
 

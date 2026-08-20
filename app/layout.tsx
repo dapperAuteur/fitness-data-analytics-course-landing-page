@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { PostHogProvider } from "@/lib/analytics/posthog-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -68,6 +69,17 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        <PostHogProvider
+          // Read here, in a Server Component, and passed down — rather than reading
+          // process.env inside the client component — so the env surface stays in one
+          // place. `?? null` is meaningful: it is what puts the provider in its
+          // supported keyless state instead of initialising with `undefined`.
+          apiKey={process.env.NEXT_PUBLIC_POSTHOG_KEY ?? null}
+          // "/ingest" is proxied to PostHog by next.config.ts so ad blockers can't
+          // drop events. NEXT_PUBLIC_POSTHOG_HOST stays the source of truth for the
+          // real upstream host and is used by the rewrite, not by the browser.
+          apiHost="/ingest"
+        />
         {children}
         <Analytics />
       </body>
