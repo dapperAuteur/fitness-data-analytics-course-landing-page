@@ -4,6 +4,7 @@ import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { LeadForm } from "@/components/LeadForm";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Specialization } from "@/components/Specialization";
 // import { Testimonial } from "@/components/Testimonial";
 import { VerifiedResearch } from "@/components/VerifiedResearch";
@@ -44,6 +45,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
       />
+      <SiteHeader />
       <main id="main" className="flex-1">
         <Hero />
         <CourseOverview />
